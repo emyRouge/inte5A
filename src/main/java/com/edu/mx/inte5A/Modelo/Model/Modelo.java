@@ -1,6 +1,7 @@
 package com.edu.mx.inte5A.Modelo.Model;
 
 import com.edu.mx.inte5A.Bien.Model.Bien;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class Modelo {
     @Lob
     @Column(name = "foto", nullable = true)
     private byte[] foto;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "modelo")
     private List<Bien> bienes;
 

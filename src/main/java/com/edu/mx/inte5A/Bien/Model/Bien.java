@@ -1,4 +1,3 @@
-// Modelo de Bien
 package com.edu.mx.inte5A.Bien.Model;
 import com.edu.mx.inte5A.Baja.Model.Baja;
 import com.edu.mx.inte5A.Lugar.Model.Lugar;
@@ -63,5 +62,85 @@ public class Bien {
         this.status = status;
     }
 
-    // Getters y Setters...
+    public int getIdBien() {
+        return idBien;
+    }
+
+    public void setIdBien(int idBien) {
+        this.idBien = idBien;
+    }
+
+    public TipoBien getTipoBien() {
+        return tipoBien;
+    }
+
+    public void setTipoBien(TipoBien tipoBien) {
+        this.tipoBien = tipoBien;
+    }
+
+    public Usuario getResponsable() {
+        return responsable;
+    }
+
+    public void setResponsable(Usuario responsable) {
+        this.responsable = responsable;
+    }
+
+    public Modelo getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(Modelo modelo) {
+        this.modelo = modelo;
+    }
+
+    public Marca getMarca() {
+        return marca;
+    }
+
+    public void setMarca(Marca marca) {
+        this.marca = marca;
+    }
+
+    public String getCodigoBarras() {
+        return codigoBarras;
+    }
+
+    public void setCodigoBarras(String codigoBarras) {
+        this.codigoBarras = codigoBarras;
+    }
+
+    public String getnSerie() {
+        return nSerie;
+    }
+
+    public void setnSerie(String nSerie) {
+        this.nSerie = nSerie;
+    }
+
+    public Lugar getLugar() {
+        return lugar;
+    }
+
+    public void setLugar(Lugar lugar) {
+        this.lugar = lugar;
+    }
+
+    public List<Baja> getBajas() {
+        return bajas;
+    }
+
+    public void setBajas(List<Baja> bajas) {
+        this.bajas = bajas;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+
 }

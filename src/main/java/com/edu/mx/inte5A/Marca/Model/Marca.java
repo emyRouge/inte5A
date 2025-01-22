@@ -1,6 +1,7 @@
 package com.edu.mx.inte5A.Marca.Model;
 
 import com.edu.mx.inte5A.Bien.Model.Bien;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class Marca {
 
     @Column(name = "status", nullable = false, columnDefinition = "TINYINT DEFAULT 1")
     private boolean status;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "marca")
     private List<Bien> bienes;
 

@@ -1,6 +1,7 @@
 package com.edu.mx.inte5A.TipoBien.Model;
 
 import com.edu.mx.inte5A.Bien.Model.Bien;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class TipoBien {
 
     @Column(name = "statusTipo", columnDefinition = "TINYINT DEFAULT 1")
     private boolean status;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "tipoBien")
     private List<Bien> bienes;
 
