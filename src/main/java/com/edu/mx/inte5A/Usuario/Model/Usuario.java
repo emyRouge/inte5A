@@ -17,8 +17,8 @@ public class Usuario {
     @Column(name = "usuario", columnDefinition = "VARCHAR(45)", unique = true)
     private String usuario;
 
-    @Column(name = "contraseña", columnDefinition = "VARCHAR(255)")
-    private String contraseña;
+    @Column(name = "contrasena", columnDefinition = "VARCHAR(255)")
+    private String contrasena;
 
     @Column(name = "status", columnDefinition = "TINYINT DEFAULT 1")
     private boolean status;
@@ -33,10 +33,10 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String nombre, String usuario, String contraseña, boolean status, String rol, Lugar lugar) {
+    public Usuario(String nombre, String usuario, String contrasena, boolean status, String rol, Lugar lugar) {
         this.nombre = nombre;
         this.usuario = usuario;
-        this.contraseña = contraseña;
+        this.contrasena = contrasena;
         this.status = status;
         this.rol = rol;
         this.lugar = lugar;
@@ -66,12 +66,12 @@ public class Usuario {
         this.usuario = usuario;
     }
 
-    public String getContraseña() {
-        return contraseña;
+    public String getContrasena() {
+        return contrasena;
     }
 
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
+    public void setContrasena(String contraseña) {
+        this.contrasena = contraseña;
     }
 
     public boolean isStatus() {

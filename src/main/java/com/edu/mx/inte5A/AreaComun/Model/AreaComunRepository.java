@@ -1,4 +1,8 @@
 package com.edu.mx.inte5A.AreaComun.Model;
 
-public interface AreaComunRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface AreaComunRepository extends JpaRepository<AreaComun, Long> {
 }

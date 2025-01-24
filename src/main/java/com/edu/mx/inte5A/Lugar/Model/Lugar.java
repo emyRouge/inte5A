@@ -27,6 +27,7 @@ public class Lugar {
     public Lugar(String lugar, boolean status) {
         this.lugar = lugar;
         this.status = status;
+
     }
 
     public int getIdlugar() {
