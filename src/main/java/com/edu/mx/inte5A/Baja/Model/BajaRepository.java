@@ -1,4 +1,6 @@
 package com.edu.mx.inte5A.Baja.Model;
 
-public interface BajaRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface BajaRepository extends JpaRepository<Baja, Long> {
 }

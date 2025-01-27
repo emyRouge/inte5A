@@ -5,12 +5,14 @@ import com.edu.mx.inte5A.Marca.Model.Marca;
 import com.edu.mx.inte5A.Modelo.Model.Modelo;
 import com.edu.mx.inte5A.TipoBien.Model.TipoBien;
 import com.edu.mx.inte5A.Usuario.Model.Usuario;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.util.List;
 
-@Entity
 @Table(name = "bien")
+@Entity
 public class Bien {
 
     @Id
@@ -18,18 +20,22 @@ public class Bien {
     private int idBien;
 
     @ManyToOne
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "tipoBien", nullable = false)
     private TipoBien tipoBien;
 
     @ManyToOne
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "responsable", nullable = true)
     private Usuario responsable;
 
     @ManyToOne
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "idModelo", nullable = false)
     private Modelo modelo;
 
     @ManyToOne
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "idMarca", nullable = false)
     private Marca marca;
 
@@ -40,10 +46,12 @@ public class Bien {
     private String nSerie;
 
     @ManyToOne
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "idLugar", nullable = true)
     private Lugar lugar;
 
     @OneToMany(mappedBy = "bien", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<Baja> bajas;
 
     @Column(name = "status", nullable = false, columnDefinition = "TINYINT DEFAULT 1")

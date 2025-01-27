@@ -1,6 +1,8 @@
 package com.edu.mx.inte5A.Baja.Model;
 
 import com.edu.mx.inte5A.Bien.Model.Bien;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -20,7 +22,8 @@ public class Baja {
     private Date fecha;
 
     @ManyToOne
-    @JoinColumn(name = "idbien", nullable = false)
+    @JsonIgnore
+   @JoinColumn(name = "idbien", nullable = false)
     private Bien bien;
 
     public Baja() {
