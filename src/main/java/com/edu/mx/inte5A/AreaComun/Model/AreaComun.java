@@ -18,7 +18,7 @@ public class AreaComun {
     private boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "idLugar", nullable = false)
+    @JoinColumn(name = "idLugar", nullable = false,unique = true)
     private Lugar lugar;
 
     public AreaComun() {

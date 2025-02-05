@@ -1,12 +1,10 @@
 package com.edu.mx.inte5A.Bien.Control;
-
 import com.edu.mx.inte5A.Bien.Model.Bien;
 import com.edu.mx.inte5A.Bien.Model.BienDto;
 import com.edu.mx.inte5A.Bien.Model.BienRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -19,6 +17,10 @@ public class BienController {
     @GetMapping("/{id}")
     public ResponseEntity<BienDto> getById(@PathVariable int id) {
         return ResponseEntity.ok(bienService.getById(id));
+    }
+    @GetMapping("/responsable/{idResponsable}")
+    public ResponseEntity<List<BienDto>> getByResponsable(@PathVariable Long idResponsable) {
+        return ResponseEntity.ok(bienService.getByResponsable(idResponsable));
     }
     @Autowired
     private BienRepository bienRepository;

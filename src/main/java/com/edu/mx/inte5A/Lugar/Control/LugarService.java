@@ -1,5 +1,6 @@
 package com.edu.mx.inte5A.Lugar.Control;
 
+import com.edu.mx.inte5A.Bien.Model.Bien;
 import com.edu.mx.inte5A.Lugar.Model.Lugar;
 import com.edu.mx.inte5A.Lugar.Model.LugarDto;
 import com.edu.mx.inte5A.Lugar.Model.LugarRepository;
@@ -21,6 +22,10 @@ public class LugarService {
                 .map(lugar-> new LugarDto(lugar.getIdlugar(),lugar.getLugar(),lugar.isStatus()))
                 .collect(Collectors.toList());
 
+    }
+
+    public List<Bien> buscarBienesPorLugar(int idlugar) {
+        return lugarRepository.findBienesByLugarId(idlugar);
     }
 
 public LugarDto buscarPorId(Long id) {

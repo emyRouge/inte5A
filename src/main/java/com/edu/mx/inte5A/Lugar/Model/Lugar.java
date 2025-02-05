@@ -1,4 +1,3 @@
-// Modelo de Lugar
 package com.edu.mx.inte5A.Lugar.Model;
 
 import com.edu.mx.inte5A.AreaComun.Model.AreaComun;

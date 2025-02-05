@@ -1,5 +1,6 @@
 package com.edu.mx.inte5A.Lugar.Control;
 
+import com.edu.mx.inte5A.Bien.Model.Bien;
 import com.edu.mx.inte5A.Lugar.Model.LugarDto;
 import com.edu.mx.inte5A.Lugar.Control.LugarService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,11 @@ public class LugarController {
 
     @Autowired
     private LugarService lugarService;
-
+    @GetMapping("/{id}/bienes")
+    public ResponseEntity<List<Bien>> obtenerBienesPorLugar(@PathVariable int id) {
+        List<Bien> bienes = lugarService.buscarBienesPorLugar(id);
+        return ResponseEntity.ok(bienes);
+    }
     @GetMapping
     public ResponseEntity<List<LugarDto>> obtenerTodos() {
         return ResponseEntity.ok(lugarService.buscarTodos());

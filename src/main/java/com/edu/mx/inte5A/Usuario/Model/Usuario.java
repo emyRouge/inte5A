@@ -27,7 +27,7 @@ public class Usuario {
     private String rol;
 
     @ManyToOne
-    @JoinColumn(name = "idLugar", nullable = true)
+    @JoinColumn(name = "idLugar", nullable = true,unique = true)
     private Lugar lugar;
 
     public Usuario() {

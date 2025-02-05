@@ -64,6 +64,13 @@ public class BienService {
         return convertToDTO(bienRepository.save(bien));
     }
 
+    public List<BienDto> getByResponsable(Long idResponsable) {
+        List<Bien> bienes = bienRepository.findByResponsable_Idusuario(idResponsable);
+        return bienes.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
     public BienDto update(int id, BienDto bienDTO) {
         Bien bien = bienRepository.findById((long) id)
                 .orElseThrow(() -> new RuntimeException("Bien no encontrado"));

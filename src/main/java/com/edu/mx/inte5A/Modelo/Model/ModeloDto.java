@@ -1,11 +1,16 @@
 // DTO
 package com.edu.mx.inte5A.Modelo.Model;
 
+
 public class ModeloDto {
 
+
     private Long idModelo;
+
     private String nombreModelo;
+
     private boolean status;
+
     private byte[] foto;
 
     public ModeloDto() {

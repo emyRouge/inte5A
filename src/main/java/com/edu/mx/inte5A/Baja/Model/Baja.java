@@ -18,12 +18,12 @@ public class Baja {
     @Column(name = "motivo", columnDefinition = "VARCHAR(255)")
     private String motivo;
 
-    @Column(name = "fecha", columnDefinition = "DATE")
+    @Column(name = "fecha", columnDefinition = "DATE DEFAULT 1")
     private Date fecha;
 
     @ManyToOne
     @JsonIgnore
-   @JoinColumn(name = "idbien", nullable = false)
+   @JoinColumn(name = "idbien", nullable = false,unique = true)
     private Bien bien;
 
     public Baja() {
