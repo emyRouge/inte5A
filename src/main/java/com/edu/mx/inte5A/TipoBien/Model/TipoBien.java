@@ -18,6 +18,7 @@ public class TipoBien {
 
     @Column(name = "statusTipo", columnDefinition = "TINYINT DEFAULT 1")
     private boolean status;
+
     @JsonIgnore
     @OneToMany(mappedBy = "tipoBien")
     private List<Bien> bienes;
@@ -25,9 +26,17 @@ public class TipoBien {
     public TipoBien() {
     }
 
-    public TipoBien(String nombre, boolean status) {
+    public TipoBien(Long idTipo, String nombre, boolean status, List<Bien> bienes) {
+        this.idTipo = idTipo;
         this.nombre = nombre;
         this.status = status;
+        this.bienes = bienes;
+    }
+
+    public TipoBien(String nombre, boolean status, List<Bien> bienes) {
+        this.nombre = nombre;
+        this.status = status;
+        this.bienes = bienes;
     }
 
     public Long getIdTipo() {

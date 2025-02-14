@@ -1,22 +1,21 @@
 package com.edu.mx.inte5A.AreaComun.Model;
 
-import com.edu.mx.inte5A.Lugar.Model.LugarDto;
+import com.edu.mx.inte5A.Lugar.Model.Lugar;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class AreaComunDto {
 
+    @NotNull(groups = {ModificarArea.class,CambiarStatus.class}, message = "Es necesario el id")
     private Long idArea;
+
+    @NotBlank(groups = {RegistrarArea.class,ModificarArea.class}, message = "Es necesario el nombre del area")
     private String nombreArea;
-    private boolean status;
-    private LugarDto lugar;
+
+    @NotNull(groups = {RegistrarArea.class,ModificarArea.class}, message = "Es necesario el lugar")
+    private Lugar lugar;
 
     public AreaComunDto() {}
-
-    public AreaComunDto(Long idArea, String nombreArea, boolean status, LugarDto lugar) {
-        this.idArea = idArea;
-        this.nombreArea = nombreArea;
-        this.status = status;
-        this.lugar = lugar;
-    }
 
     public Long getIdArea() {
         return idArea;
@@ -34,19 +33,17 @@ public class AreaComunDto {
         this.nombreArea = nombreArea;
     }
 
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
-    public LugarDto getLugar() {
+    public Lugar getLugar() {
         return lugar;
     }
 
-    public void setLugar(LugarDto lugar) {
+    public void setLugar(Lugar lugar) {
         this.lugar = lugar;
     }
+
+    //Validaciones
+    public interface RegistrarArea{}
+    public interface ModificarArea{}
+    public interface CambiarStatus{}
+
 }

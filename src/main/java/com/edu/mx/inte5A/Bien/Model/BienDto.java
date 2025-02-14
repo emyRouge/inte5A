@@ -1,35 +1,57 @@
 package com.edu.mx.inte5A.Bien.Model;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class BienDto {
 
-    private int idBien;
+    @NotNull(groups = {ModificarBien.class, CambiarStatus.class}, message = "Es necesario el id del bien")
+    private Long idBien;
+
+    @NotBlank(groups = {RegistrarBien.class, ModificarBien.class}, message = "Es necesario el codigo de barras")
     private String codigoBarras;
+
+    @NotBlank (groups = {RegistrarBien.class, ModificarBien.class}, message = "Es necesario el numero de serie")
     private String nSerie;
-    private boolean status;
 
     // Detalles de entidades relacionadas
+    @NotNull (groups = {ModificarBien.class, CambiarStatus.class}, message = "Es necesario el id del tipo de bien")
     private Long tipoBienId;
+
+    @NotBlank (groups = {RegistrarBien.class, ModificarBien.class}, message = "Es necesario el nombre del tipo de bien")
     private String tipoBienNombre;
 
+    @NotNull (groups = {ModificarBien.class, CambiarStatus.class}, message = "Es necesario el id del responsable")
     private Long responsableId;
+
+    @NotBlank (groups = {RegistrarBien.class, ModificarBien.class}, message = "Es necesario el nombre del responsable")
     private String responsableNombre;
 
+    @NotNull(groups = {ModificarBien.class, CambiarStatus.class}, message = "Es necesario el id del modelo")
     private Long modeloId;
+
+    @NotBlank (groups = {RegistrarBien.class, ModificarBien.class}, message = "Es necesario el nombre del modelo")
     private String modeloNombre;
 
-    private int marcaId;
+    @NotNull (groups = {ModificarBien.class, CambiarStatus.class}, message = "Es necesario el id de la marca")
+    private Long marcaId;
+
+    @NotBlank (groups = {RegistrarBien.class, ModificarBien.class}, message = "Es necesario el nombre de la marca")
     private String marcaNombre;
 
-    private int lugarId;
+    @NotNull (groups = {ModificarBien.class, CambiarStatus.class}, message = "Es necesario el id del lugar")
+    private Long lugarId;
+
+    @NotBlank (groups = {RegistrarBien.class, ModificarBien.class}, message =  "Es necesario el nombre del lugar")
     private String lugarNombre;
 
     public BienDto() {}
 
-    public int getIdBien() {
+    public Long getIdBien() {
         return idBien;
     }
 
-    public void setIdBien(int idBien) {
+    public void setIdBien(Long idBien) {
         this.idBien = idBien;
     }
 
@@ -47,14 +69,6 @@ public class BienDto {
 
     public void setnSerie(String nSerie) {
         this.nSerie = nSerie;
-    }
-
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
     }
 
     public Long getTipoBienId() {
@@ -105,11 +119,11 @@ public class BienDto {
         this.modeloNombre = modeloNombre;
     }
 
-    public int getMarcaId() {
+    public Long getMarcaId() {
         return marcaId;
     }
 
-    public void setMarcaId(int marcaId) {
+    public void setMarcaId(Long marcaId) {
         this.marcaId = marcaId;
     }
 
@@ -121,11 +135,11 @@ public class BienDto {
         this.marcaNombre = marcaNombre;
     }
 
-    public long getLugarId() {
+    public Long getLugarId() {
         return lugarId;
     }
 
-    public void setLugarId(int lugarId) {
+    public void setLugarId(Long lugarId) {
         this.lugarId = lugarId;
     }
 
@@ -136,4 +150,10 @@ public class BienDto {
     public void setLugarNombre(String lugarNombre) {
         this.lugarNombre = lugarNombre;
     }
+
+    //Validaciones
+    public interface RegistrarBien {}
+    public interface ModificarBien {}
+    public interface CambiarStatus {}
+
 }

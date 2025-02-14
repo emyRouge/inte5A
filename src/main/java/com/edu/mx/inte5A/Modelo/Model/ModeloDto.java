@@ -2,25 +2,21 @@
 package com.edu.mx.inte5A.Modelo.Model;
 
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class ModeloDto {
 
-
+    @NotNull(groups = {ModificarModelo.class, CambiarStatus.class})
     private Long idModelo;
 
+    @NotBlank(groups = {RegistrarModelo.class, ModificarModelo.class})
     private String nombreModelo;
 
-    private boolean status;
-
+    @NotNull(groups = {ModificarModelo.class, ModificarModelo.class})
     private byte[] foto;
 
     public ModeloDto() {
-    }
-
-    public ModeloDto(Long idModelo, String nombreModelo, boolean status, byte[] foto) {
-        this.idModelo = idModelo;
-        this.nombreModelo = nombreModelo;
-        this.status = status;
-        this.foto = foto;
     }
 
     public Long getIdModelo() {
@@ -39,14 +35,6 @@ public class ModeloDto {
         this.nombreModelo = nombreModelo;
     }
 
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
     public byte[] getFoto() {
         return foto;
     }
@@ -54,4 +42,10 @@ public class ModeloDto {
     public void setFoto(byte[] foto) {
         this.foto = foto;
     }
+
+    //Validaciones
+    public interface RegistrarModelo {}
+    public interface ModificarModelo {}
+    public interface CambiarStatus {}
+
 }

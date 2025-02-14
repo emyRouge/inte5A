@@ -1,13 +1,23 @@
 // BajaDto.java
 package com.edu.mx.inte5A.Baja.Model;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.Date;
 
 public class BajaDto {
+
+    @NotNull(groups = {ModificarBaja.class, CambiarStatus.class}, message = "Es necesario el id")
     private Long idbaja;
+
+    @NotBlank(groups = {RegistrarBaja.class, CambiarStatus.class}, message = "Es necesario especificar el motivo")
     private String motivo;
-    private Date fecha;
+
+    @NotNull(groups = {RegistrarBaja.class, CambiarStatus.class}, message = "Es necesario el bien")
     private Long idBien;
+
+    public BajaDto() {}
 
     // Getters y Setters
     public Long getIdbaja() {
@@ -26,14 +36,6 @@ public class BajaDto {
         this.motivo = motivo;
     }
 
-    public Date getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
-    }
-
     public Long getIdBien() {
         return idBien;
     }
@@ -41,4 +43,10 @@ public class BajaDto {
     public void setIdBien(Long idBien) {
         this.idBien = idBien;
     }
+
+    //Validaciones
+    public interface RegistrarBaja {}
+    public interface ModificarBaja {}
+    public interface CambiarStatus {}
+
 }

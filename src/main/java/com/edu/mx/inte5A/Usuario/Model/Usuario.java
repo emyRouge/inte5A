@@ -9,7 +9,7 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idusuario;
+    private Long idUsuario;
 
     @Column(name = "nombre", columnDefinition = "VARCHAR(100)")
     private String nombre;
@@ -27,10 +27,20 @@ public class Usuario {
     private String rol;
 
     @ManyToOne
-    @JoinColumn(name = "idLugar", nullable = true,unique = true)
+    @JoinColumn(name = "idLugar", nullable = true)
     private Lugar lugar;
 
     public Usuario() {
+    }
+
+    public Usuario(Long idusuario, String nombre, String usuario, String contrasena, boolean status, String rol, Lugar lugar) {
+        this.idUsuario = idusuario;
+        this.nombre = nombre;
+        this.usuario = usuario;
+        this.contrasena = contrasena;
+        this.status = status;
+        this.rol = rol;
+        this.lugar = lugar;
     }
 
     public Usuario(String nombre, String usuario, String contrasena, boolean status, String rol, Lugar lugar) {
@@ -43,11 +53,11 @@ public class Usuario {
     }
 
     public Long getIdusuario() {
-        return idusuario;
+        return idUsuario;
     }
 
     public void setIdusuario(Long idusuario) {
-        this.idusuario = idusuario;
+        this.idUsuario  = idusuario;
     }
 
     public String getNombre() {
@@ -98,3 +108,4 @@ public class Usuario {
         this.lugar = lugar;
     }
 }
+

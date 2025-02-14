@@ -18,10 +18,17 @@ public class AreaComun {
     private boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "idLugar", nullable = false,unique = true)
+    @JoinColumn(name = "idLugar", nullable = false)
     private Lugar lugar;
 
     public AreaComun() {
+    }
+
+    public AreaComun(Long idArea, String nombreArea, boolean status, Lugar lugar) {
+        this.idArea = idArea;
+        this.nombreArea = nombreArea;
+        this.status = status;
+        this.lugar = lugar;
     }
 
     public AreaComun(String nombreArea, boolean status, Lugar lugar) {

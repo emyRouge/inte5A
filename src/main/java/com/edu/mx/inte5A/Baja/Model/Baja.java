@@ -18,15 +18,22 @@ public class Baja {
     @Column(name = "motivo", columnDefinition = "VARCHAR(255)")
     private String motivo;
 
-    @Column(name = "fecha", columnDefinition = "DATE DEFAULT 1")
+    @Column(name = "fecha", columnDefinition = "DATE")
     private Date fecha;
 
     @ManyToOne
     @JsonIgnore
-   @JoinColumn(name = "idbien", nullable = false,unique = true)
+    @JoinColumn(name = "idbien", nullable = false)
     private Bien bien;
 
     public Baja() {
+    }
+
+    public Baja(Long idbaja, String motivo, Date fecha, Bien bien) {
+        this.idbaja = idbaja;
+        this.motivo = motivo;
+        this.fecha = fecha;
+        this.bien = bien;
     }
 
     public Baja(String motivo, Date fecha, Bien bien) {

@@ -1,24 +1,23 @@
 package com.edu.mx.inte5A.Lugar.Model;
 
-public class LugarDto {
-   private int idlugar;
-   private String lugar;
-   private boolean status;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
+public class LugarDto {
+
+    @NotNull(groups = {ModificarLugar.class, CambiarStatus.class}, message = "Es necesario el id del lugar")
+    private Long idlugar;
+
+    @NotBlank(groups = {RegistrarLugar.class, CambiarStatus.class}, message = "Es necesario el nombre del lugar")
+    private String lugar;
 
     public LugarDto() {}
 
-    public LugarDto(int idlugar,String lugar, boolean status) {
-       this.idlugar = idlugar;
-        this.lugar = lugar;
-        this.status = status;
-    }
-
-    public int getIdlugar() {
+    public Long getIdlugar() {
         return idlugar;
     }
 
-    public void setIdlugar(int idlugar) {
+    public void setIdlugar(Long idlugar) {
         this.idlugar = idlugar;
     }
 
@@ -30,11 +29,8 @@ public class LugarDto {
         this.lugar = lugar;
     }
 
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
+    //Validaciones
+    public interface RegistrarLugar {}
+    public interface ModificarLugar {}
+    public interface CambiarStatus {}
 }

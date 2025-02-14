@@ -17,7 +17,7 @@ public class Bien {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idBien;
+    private Long idBien;
 
     @ManyToOne
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -54,12 +54,16 @@ public class Bien {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<Baja> bajas;
 
+    //Faltaria agregar fecha de registro
+
     @Column(name = "status", nullable = false, columnDefinition = "TINYINT DEFAULT 1")
     private boolean status;
 
-    public Bien() {}
+    public Bien() {
+    }
 
-    public Bien(TipoBien tipoBien, Usuario responsable, Modelo modelo, Marca marca, String codigoBarras, String nSerie, Lugar lugar, boolean status) {
+    public Bien(Long idBien, TipoBien tipoBien, Usuario responsable, Modelo modelo, Marca marca, String codigoBarras, String nSerie, Lugar lugar, List<Baja> bajas, boolean status) {
+        this.idBien = idBien;
         this.tipoBien = tipoBien;
         this.responsable = responsable;
         this.modelo = modelo;
@@ -67,14 +71,27 @@ public class Bien {
         this.codigoBarras = codigoBarras;
         this.nSerie = nSerie;
         this.lugar = lugar;
+        this.bajas = bajas;
         this.status = status;
     }
 
-    public int getIdBien() {
+    public Bien(TipoBien tipoBien, Usuario responsable, Modelo modelo, Marca marca, String codigoBarras, String nSerie, Lugar lugar, List<Baja> bajas, boolean status) {
+        this.tipoBien = tipoBien;
+        this.responsable = responsable;
+        this.modelo = modelo;
+        this.marca = marca;
+        this.codigoBarras = codigoBarras;
+        this.nSerie = nSerie;
+        this.lugar = lugar;
+        this.bajas = bajas;
+        this.status = status;
+    }
+
+    public Long getIdBien() {
         return idBien;
     }
 
-    public void setIdBien(int idBien) {
+    public void setIdBien(Long idBien) {
         this.idBien = idBien;
     }
 
@@ -149,6 +166,5 @@ public class Bien {
     public void setStatus(boolean status) {
         this.status = status;
     }
-
 
 }

@@ -12,8 +12,9 @@ import java.util.Optional;
 
 @Repository
 public interface LugarRepository extends JpaRepository<Lugar, Long> {
-
     Optional<Lugar> findByLugar(String lugar);
     @Query("SELECT b FROM Bien b WHERE b.lugar.idlugar = :idlugar")
     List<Bien> findBienesByLugarId(@Param("idlugar") int idlugar);
+    List<Lugar> findAllByStatusIsTrue();
+
 }

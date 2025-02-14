@@ -22,6 +22,7 @@ public class Modelo {
     @Lob
     @Column(name = "foto", nullable = true)
     private byte[] foto;
+
     @JsonIgnore
     @OneToMany(mappedBy = "modelo")
     private List<Bien> bienes;
@@ -29,10 +30,19 @@ public class Modelo {
     public Modelo() {
     }
 
-    public Modelo(String nombreModelo, boolean status, byte[] foto) {
+    public Modelo(Long idModelo, String nombreModelo, boolean status, byte[] foto, List<Bien> bienes) {
+        this.idModelo = idModelo;
         this.nombreModelo = nombreModelo;
         this.status = status;
         this.foto = foto;
+        this.bienes = bienes;
+    }
+
+    public Modelo(String nombreModelo, boolean status, byte[] foto, List<Bien> bienes) {
+        this.nombreModelo = nombreModelo;
+        this.status = status;
+        this.foto = foto;
+        this.bienes = bienes;
     }
 
     public Long getIdModelo() {
@@ -75,3 +85,4 @@ public class Modelo {
         this.bienes = bienes;
     }
 }
+

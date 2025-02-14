@@ -1,34 +1,41 @@
 package com.edu.mx.inte5A.AreaComun.Control;
 
 import com.edu.mx.inte5A.AreaComun.Model.AreaComunDto;
+import com.edu.mx.inte5A.utils.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/areas-comunes")
 public class AreaComunController {
 
-    @Autowired
-    private AreaComunService areaComunService;
+    private final AreaComunService areaComunService;
 
-    @PostMapping
-    public ResponseEntity<AreaComunDto> crearAreaComun(@RequestBody AreaComunDto areaComunDto) {
-        return ResponseEntity.ok(areaComunService.crearAreaComun(areaComunDto));
+    @Autowired
+    public AreaComunController(AreaComunService areaComunService) {
+        this.areaComunService = areaComunService;
+    }
+
+    @PostMapping("/{id}/status")
+    public ResponseEntity<Object> crearAreaComun(@Validated(AreaComunDto.RegistrarArea.class) @RequestBody AreaComunDto areaComunDto) {
+        return areaComunService.guardarArea(areaComunDto);
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<AreaComunDto> cambiarStatus(@PathVariable Long id) {
-        return ResponseEntity.ok(areaComunService.cambiarStatus(id));
+    public ResponseEntity<Object> cambiarStatus(@PathVariable Long idLugar) {
+        return areaComunService.cambiarStatus(idLugar);
     }
 
     @PutMapping("/{id}/lugar/{idLugar}")
-    public ResponseEntity<AreaComunDto> asignarLugar(@PathVariable Long id, @PathVariable Long idLugar) {
-        return ResponseEntity.ok(areaComunService.asignarLugar(id, idLugar));
+    public ResponseEntity<Message> asignarLugar(@PathVariable Long idArea, @PathVariable Long idLugar) {
+        return areaComunService.asignarLugar(idArea, idLugar);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<AreaComunDto> actualizarAreaComun(@PathVariable Long id, @RequestBody AreaComunDto areaComunDto) {
-        return ResponseEntity.ok(areaComunService.actualizarAreaComun(id, areaComunDto));
+    @PutMapping({"/{idArea}"})
+    public ResponseEntity<Object> actualizarAreaComun(@PathVariable Long idArea, @Validated @RequestBody AreaComunDto areaComunDto) {
+        return areaComunService.modificarArea(idArea, areaComunDto);
     }
+
 }
