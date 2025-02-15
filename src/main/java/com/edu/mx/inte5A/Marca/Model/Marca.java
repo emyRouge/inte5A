@@ -11,7 +11,7 @@ public class Marca {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idmarca;
+    private Long idMarca;
 
     @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
@@ -24,8 +24,8 @@ public class Marca {
 
     public Marca() {}
 
-    public Marca(Long idmarca, String nombre, boolean status, List<Bien> bienes) {
-        this.idmarca = idmarca;
+    public Marca(Long idMarca, String nombre, boolean status, List<Bien> bienes) {
+        this.idMarca = idMarca;
         this.nombre = nombre;
         this.status = status;
         this.bienes = bienes;
@@ -38,11 +38,11 @@ public class Marca {
     }
 
     public Long getIdmarca() {
-        return idmarca;
+        return idMarca;
     }
 
-    public void setIdmarca(Long idmarca) {
-        this.idmarca = idmarca;
+    public void setIdmarca(Long idMarca) {
+        this.idMarca = idMarca;
     }
 
     public String getNombre() {

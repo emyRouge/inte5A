@@ -24,7 +24,7 @@ public class AreaComunController {
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<Object> cambiarStatus(@PathVariable Long idLugar) {
+    public ResponseEntity<Object> cambiarStatus(@Validated(AreaComunDto.CambiarStatus.class) @PathVariable Long idLugar) {
         return areaComunService.cambiarStatus(idLugar);
     }
 
@@ -34,7 +34,7 @@ public class AreaComunController {
     }
 
     @PutMapping({"/{idArea}"})
-    public ResponseEntity<Object> actualizarAreaComun(@PathVariable Long idArea, @Validated @RequestBody AreaComunDto areaComunDto) {
+    public ResponseEntity<Object> actualizarAreaComun(@PathVariable Long idArea, @Validated (AreaComunDto.ModificarArea.class)@RequestBody AreaComunDto areaComunDto) {
         return areaComunService.modificarArea(idArea, areaComunDto);
     }
 

@@ -28,7 +28,7 @@ public class BajaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> modificarBaja(@PathVariable Long idBaja, @Validated @RequestBody BajaDto bajaDto) {
+    public ResponseEntity<Object> modificarBaja(@PathVariable Long idBaja, @Validated (BajaDto.ModificarBaja.class) @RequestBody BajaDto bajaDto) {
         return bajaService.modificarBaja(idBaja, bajaDto);
     }
 

@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface MarcaRepository extends JpaRepository<Marca, Integer> {
+public interface MarcaRepository extends JpaRepository<Marca, Long> {
     Optional<Marca> findByNombre(String nombre);
     List<Marca> findAllByStatusIsTrue();
+
 }

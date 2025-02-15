@@ -4,6 +4,7 @@ package com.edu.mx.inte5A.Marca.Control;
 import com.edu.mx.inte5A.Marca.Model.MarcaDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,36 +13,41 @@ import java.util.List;
 @RequestMapping("/marca")
 public class MarcaController {
 
+    private final MarcaService marcaService;
+
     @Autowired
-    private MarcaService marcaService;
+    public MarcaController(MarcaService marcaService) {
+        this.marcaService = marcaService;
+    }
 
     @GetMapping
-    public ResponseEntity<List<MarcaDto>> obtenerTodos() {
-        return ResponseEntity.ok(marcaService.buscarTodos());
+    public ResponseEntity<Object> obtenerTodos() {
+        return marcaService.buscarTodos();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MarcaDto> obtenerPorId(@PathVariable int id) {
-        return ResponseEntity.ok(marcaService.buscarPorId(id));
+    public ResponseEntity<Object> obtenerPorId(@PathVariable Long idMarca) {
+        return marcaService.buscarPorId(idMarca);
     }
 
     @GetMapping("/nombre/{nombre}")
-    public ResponseEntity<MarcaDto> obtenerPorNombre(@PathVariable String nombre) {
-        return ResponseEntity.ok(marcaService.buscarPorNombre(nombre));
+    public ResponseEntity<Object> obtenerPorNombre(@PathVariable String nombre) {
+        return marcaService.buscarPorNombre(nombre);
     }
 
     @PutMapping("/cambiar-status/{id}")
-    public ResponseEntity<MarcaDto> cambiarStatus(@PathVariable int id) {
-        return ResponseEntity.ok(marcaService.cambiarStatus(id));
+    public ResponseEntity<Object> cambiarStatus(@Validated(MarcaDto.CambiarStatus.class) @PathVariable Long idMarca) {
+        return marcaService.cambiarStatus(idMarca);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MarcaDto> actualizar(@PathVariable int id, @RequestBody MarcaDto marcaDto) {
-        return ResponseEntity.ok(marcaService.actualizar(id, marcaDto));
+    public ResponseEntity<Object> actualizar(@PathVariable Long idMarca, @Validated(MarcaDto.ModificarMarca.class) @RequestBody MarcaDto marcaDto) {
+        return marcaService.Actualizar(idMarca, marcaDto);
     }
 
     @PostMapping
-    public ResponseEntity<MarcaDto> crear(@RequestBody MarcaDto marcaDto) {
-        return ResponseEntity.ok(marcaService.crear(marcaDto));
+    public ResponseEntity<Object> crear(@Validated(MarcaDto.RegistrarMarca.class) @RequestBody MarcaDto marcaDto) {
+        return marcaService.crear(marcaDto);
     }
+
 }

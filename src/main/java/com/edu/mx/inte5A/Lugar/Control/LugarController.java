@@ -53,7 +53,7 @@ public class LugarController {
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<Object> cambiarStatus(@PathVariable Long idLugar) {
+    public ResponseEntity<Object> cambiarStatus(@Validated (LugarDto.CambiarStatus.class) @PathVariable Long idLugar) {
         return lugarService.CambiarStatus(idLugar);
     }
 
