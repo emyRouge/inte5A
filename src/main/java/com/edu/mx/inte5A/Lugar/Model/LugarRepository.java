@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface LugarRepository extends JpaRepository<Lugar, Long> {
     Optional<Lugar> findByLugar(String lugar);
     @Query("SELECT b FROM Bien b WHERE b.lugar.idlugar = :idlugar")
-    List<Bien> findBienesByLugarId(@Param("idlugar") int idlugar);
+    List<Bien> findBienesByLugarId(@Param("idLugar") Long idLugar);
     List<Lugar> findAllByStatusIsTrue();
 
 }

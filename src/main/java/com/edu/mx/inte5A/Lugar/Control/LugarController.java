@@ -5,6 +5,7 @@ import com.edu.mx.inte5A.Lugar.Model.LugarDto;
 import com.edu.mx.inte5A.Lugar.Control.LugarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,40 +14,47 @@ import java.util.List;
 @RequestMapping("/lugares")
 public class LugarController {
 
+    private final LugarService lugarService;
+
     @Autowired
-    private LugarService lugarService;
-    @GetMapping("/{id}/bienes")
-    public ResponseEntity<List<Bien>> obtenerBienesPorLugar(@PathVariable int id) {
-        List<Bien> bienes = lugarService.buscarBienesPorLugar(id);
-        return ResponseEntity.ok(bienes);
+    public LugarController(LugarService lugarService) {
+        this.lugarService = lugarService;
     }
+
+    @GetMapping("/{id}/bienes")
+    public ResponseEntity<Object> obtenerBienesPorLugar(@PathVariable Long idLugar) {
+        return lugarService.buscarBienesPorLugar(idLugar);
+    }
+
     @GetMapping
-    public ResponseEntity<List<LugarDto>> obtenerTodos() {
-        return ResponseEntity.ok(lugarService.buscarTodos());
+    public ResponseEntity<Object> obtenerTodos() {
+        return lugarService.buscarTodos();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<LugarDto> obtenerPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(lugarService.buscarPorId(id));
+    public ResponseEntity<Object> obtenerPorId(@PathVariable Long idLugar) {
+        return lugarService.buscarPorId(idLugar);
     }
 
     @GetMapping("/nombre/{nombre}")
-    public ResponseEntity<LugarDto> obtenerPorNombre(@PathVariable String nombre) {
-        return ResponseEntity.ok(lugarService.buscarPorNombre(nombre));
+    public ResponseEntity<Object> obtenerPorNombre(@PathVariable String nombre) {
+        return lugarService.buscarPorNombre(nombre);
     }
 
     @PostMapping
-    public ResponseEntity<LugarDto> crearLugar(@RequestBody LugarDto lugarDto) {
-        return ResponseEntity.ok(lugarService.crearLugar(lugarDto));
+    public ResponseEntity<Object> crearLugar(@Validated(LugarDto.RegistrarLugar.class) @RequestBody LugarDto lugarDto) {
+        return lugarService.crearLugar(lugarDto);
+
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<LugarDto> actualizarLugar(@PathVariable Long id, @RequestBody LugarDto lugarDto) {
-        return ResponseEntity.ok(lugarService.Actualizar(id, lugarDto));
+    public ResponseEntity<Object> actualizarLugar(@PathVariable Long idLugar, @Validated(LugarDto.ModificarLugar.class) @RequestBody LugarDto lugarDto) {
+        return lugarService.Actualizar(idLugar, lugarDto);
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<LugarDto> cambiarStatus(@PathVariable Long id) {
-        return ResponseEntity.ok(lugarService.CambiarStatus(id));
+    public ResponseEntity<Object> cambiarStatus(@PathVariable Long idLugar) {
+        return lugarService.CambiarStatus(idLugar);
     }
+
 }

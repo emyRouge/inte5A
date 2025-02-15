@@ -6,19 +6,27 @@ import jakarta.validation.constraints.NotNull;
 public class LugarDto {
 
     @NotNull(groups = {ModificarLugar.class, CambiarStatus.class}, message = "Es necesario el id del lugar")
-    private Long idlugar;
+    private Long idLugar;
 
     @NotBlank(groups = {RegistrarLugar.class, CambiarStatus.class}, message = "Es necesario el nombre del lugar")
     private String lugar;
 
+    private boolean status;
+
     public LugarDto() {}
 
-    public Long getIdlugar() {
-        return idlugar;
+    public LugarDto(Long idLugar, String lugar, boolean status) {
+        this.idLugar = idLugar;
+        this.lugar = lugar;
+        this.status = status;
     }
 
-    public void setIdlugar(Long idlugar) {
-        this.idlugar = idlugar;
+    public Long getIdlugar() {
+        return idLugar;
+    }
+
+    public void setIdlugar(Long idLugar) {
+        this.idLugar = idLugar;
     }
 
     public String getLugar() {
@@ -27,6 +35,14 @@ public class LugarDto {
 
     public void setLugar(String lugar) {
         this.lugar = lugar;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     //Validaciones

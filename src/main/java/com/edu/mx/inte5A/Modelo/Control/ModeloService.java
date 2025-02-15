@@ -14,8 +14,12 @@ import java.util.stream.Collectors;
 @Service
 public class ModeloService {
 
+    private final ModeloRepository modeloRepository;
+
     @Autowired
-    private ModeloRepository modeloRepository;
+    public ModeloService(ModeloRepository modeloRepository) {
+        this.modeloRepository = modeloRepository;
+    }
 
     public List<ModeloDto> buscarTodos() {
         return modeloRepository.findAll()

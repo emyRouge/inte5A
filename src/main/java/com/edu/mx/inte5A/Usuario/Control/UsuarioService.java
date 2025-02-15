@@ -10,9 +10,13 @@ import java.util.Optional;
 @Service
 public class UsuarioService {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
+    @Autowired
+    public UsuarioService(UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
+    }
+    
     public UsuarioDto buscarPorId(Long id) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
         return usuarioOpt.map(this::convertirADto).orElse(null);

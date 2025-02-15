@@ -14,8 +14,12 @@ import java.util.stream.Collectors;
 @Service
 public class TipoBienService {
 
+    private final TipoBienRepository tipoBienRepository;
+
     @Autowired
-    private TipoBienRepository tipoBienRepository;
+    public TipoBienService(TipoBienRepository tipoBienRepository) {
+        this.tipoBienRepository = tipoBienRepository;
+    }
 
     public List<TipoBienDto> buscarTodos() {
         return tipoBienRepository.findAll()

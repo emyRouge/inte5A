@@ -14,8 +14,12 @@ import java.util.stream.Collectors;
 @Service
 public class MarcaService {
 
+    private final MarcaRepository marcaRepository;
+
     @Autowired
-    private MarcaRepository marcaRepository;
+    public MarcaService(MarcaRepository marcaRepository) {
+        this.marcaRepository = marcaRepository;
+    }
 
     public List<MarcaDto> buscarTodos() {
         return marcaRepository.findAll()
