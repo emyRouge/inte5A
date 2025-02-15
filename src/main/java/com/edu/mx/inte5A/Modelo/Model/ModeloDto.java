@@ -13,10 +13,15 @@ public class ModeloDto {
     @NotBlank(groups = {RegistrarModelo.class, ModificarModelo.class})
     private String nombreModelo;
 
-    @NotNull(groups = {ModificarModelo.class, ModificarModelo.class})
     private byte[] foto;
 
     public ModeloDto() {
+    }
+
+    public ModeloDto(Long idModelo, String nombreModelo, boolean status, byte[] foto) {
+        this.idModelo = idModelo;
+        this.nombreModelo = nombreModelo;
+        this.foto = foto;
     }
 
     public Long getIdModelo() {
