@@ -1,5 +1,15 @@
 package com.edu.mx.inte5A.Bien.Model;
 
+import com.edu.mx.inte5A.Lugar.Model.Lugar;
+import com.edu.mx.inte5A.Lugar.Model.LugarDto;
+import com.edu.mx.inte5A.Marca.Model.Marca;
+import com.edu.mx.inte5A.Marca.Model.MarcaDto;
+import com.edu.mx.inte5A.Modelo.Model.Modelo;
+import com.edu.mx.inte5A.Modelo.Model.ModeloDto;
+import com.edu.mx.inte5A.TipoBien.Model.TipoBien;
+import com.edu.mx.inte5A.TipoBien.Model.TipoBienDto;
+import com.edu.mx.inte5A.Usuario.Model.Usuario;
+import com.edu.mx.inte5A.Usuario.Model.UsuarioDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -14,36 +24,23 @@ public class BienDto {
     @NotBlank (groups = {RegistrarBien.class, ModificarBien.class}, message = "Es necesario el numero de serie")
     private String nSerie;
 
+    private boolean status;
+
     // Detalles de entidades relacionadas
     @NotNull (groups = {ModificarBien.class, CambiarStatus.class}, message = "Es necesario el id del tipo de bien")
-    private Long tipoBienId;
-
-    @NotBlank (groups = {RegistrarBien.class, ModificarBien.class}, message = "Es necesario el nombre del tipo de bien")
-    private String tipoBienNombre;
+    private TipoBienDto tipoBienDto;
 
     @NotNull (groups = {ModificarBien.class, CambiarStatus.class}, message = "Es necesario el id del responsable")
-    private Long responsableId;
-
-    @NotBlank (groups = {RegistrarBien.class, ModificarBien.class}, message = "Es necesario el nombre del responsable")
-    private String responsableNombre;
+    private UsuarioDto usuarioDto;
 
     @NotNull(groups = {ModificarBien.class, CambiarStatus.class}, message = "Es necesario el id del modelo")
-    private Long modeloId;
-
-    @NotBlank (groups = {RegistrarBien.class, ModificarBien.class}, message = "Es necesario el nombre del modelo")
-    private String modeloNombre;
+    private ModeloDto modeloDto;
 
     @NotNull (groups = {ModificarBien.class, CambiarStatus.class}, message = "Es necesario el id de la marca")
-    private Long marcaId;
-
-    @NotBlank (groups = {RegistrarBien.class, ModificarBien.class}, message = "Es necesario el nombre de la marca")
-    private String marcaNombre;
+    private MarcaDto marcaDto;
 
     @NotNull (groups = {ModificarBien.class, CambiarStatus.class}, message = "Es necesario el id del lugar")
-    private Long lugarId;
-
-    @NotBlank (groups = {RegistrarBien.class, ModificarBien.class}, message =  "Es necesario el nombre del lugar")
-    private String lugarNombre;
+    private LugarDto lugarDto;
 
     public BienDto() {}
 
@@ -63,92 +60,64 @@ public class BienDto {
         this.codigoBarras = codigoBarras;
     }
 
-    public String getnSerie() {
+    public String getNSerie() {
         return nSerie;
     }
 
-    public void setnSerie(String nSerie) {
+    public void setNSerie(String nSerie) {
         this.nSerie = nSerie;
     }
 
-    public Long getTipoBienId() {
-        return tipoBienId;
+    public TipoBienDto getTipoBienDto() {
+        return tipoBienDto;
     }
 
-    public void setTipoBienId(Long tipoBienId) {
-        this.tipoBienId = tipoBienId;
+    public void setTipoBienDto(TipoBienDto tipoBienDto) {
+        this.tipoBienDto = tipoBienDto;
     }
 
-    public String getTipoBienNombre() {
-        return tipoBienNombre;
+    public UsuarioDto getUsuarioDto() {
+        return usuarioDto;
     }
 
-    public void setTipoBienNombre(String tipoBienNombre) {
-        this.tipoBienNombre = tipoBienNombre;
+    public void setUsuarioDto(UsuarioDto usuarioDto) {
+        this.usuarioDto = usuarioDto;
     }
 
-    public Long getResponsableId() {
-        return responsableId;
+    public ModeloDto getModeloDto() {
+        return modeloDto;
     }
 
-    public void setResponsableId(Long responsableId) {
-        this.responsableId = responsableId;
+    public void setModeloDto(ModeloDto modeloDto) {
+        this.modeloDto = modeloDto;
     }
 
-    public String getResponsableNombre() {
-        return responsableNombre;
+    public MarcaDto getMarcaDto() {
+        return marcaDto;
     }
 
-    public void setResponsableNombre(String responsableNombre) {
-        this.responsableNombre = responsableNombre;
+    public void setMarcaDto(MarcaDto marcaDto) {
+        this.marcaDto = marcaDto;
     }
 
-    public Long getModeloId() {
-        return modeloId;
+    public LugarDto getLugarDto() {
+        return lugarDto;
     }
 
-    public void setModeloId(Long modeloId) {
-        this.modeloId = modeloId;
+    public void setLugarDto(LugarDto lugarDto) {
+        this.lugarDto = lugarDto;
     }
 
-    public String getModeloNombre() {
-        return modeloNombre;
+    public BienDto getBienDto() {
+        return this;
     }
 
-    public void setModeloNombre(String modeloNombre) {
-        this.modeloNombre = modeloNombre;
+    public boolean isStatus() {
+        return status;
     }
 
-    public Long getMarcaId() {
-        return marcaId;
-    }
-
-    public void setMarcaId(Long marcaId) {
-        this.marcaId = marcaId;
-    }
-
-    public String getMarcaNombre() {
-        return marcaNombre;
-    }
-
-    public void setMarcaNombre(String marcaNombre) {
-        this.marcaNombre = marcaNombre;
-    }
-
-    public Long getLugarId() {
-        return lugarId;
-    }
-
-    public void setLugarId(Long lugarId) {
-        this.lugarId = lugarId;
-    }
-
-    public String getLugarNombre() {
-        return lugarNombre;
-    }
-
-    public void setLugarNombre(String lugarNombre) {
-        this.lugarNombre = lugarNombre;
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     //Validaciones

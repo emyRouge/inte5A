@@ -27,7 +27,7 @@ public class Bien {
     @ManyToOne
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "responsable", nullable = true)
-    private Usuario responsable;
+    private Usuario usuario;
 
     @ManyToOne
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -62,10 +62,10 @@ public class Bien {
     public Bien() {
     }
 
-    public Bien(Long idBien, TipoBien tipoBien, Usuario responsable, Modelo modelo, Marca marca, String codigoBarras, String nSerie, Lugar lugar, List<Baja> bajas, boolean status) {
+    public Bien(Long idBien, TipoBien tipoBien, Usuario usuario, Modelo modelo, Marca marca, String codigoBarras, String nSerie, Lugar lugar, List<Baja> bajas, boolean status) {
         this.idBien = idBien;
         this.tipoBien = tipoBien;
-        this.responsable = responsable;
+        this.usuario = usuario;
         this.modelo = modelo;
         this.marca = marca;
         this.codigoBarras = codigoBarras;
@@ -75,9 +75,9 @@ public class Bien {
         this.status = status;
     }
 
-    public Bien(TipoBien tipoBien, Usuario responsable, Modelo modelo, Marca marca, String codigoBarras, String nSerie, Lugar lugar, List<Baja> bajas, boolean status) {
+    public Bien(TipoBien tipoBien, Usuario usuario, Modelo modelo, Marca marca, String codigoBarras, String nSerie, Lugar lugar, List<Baja> bajas, boolean status) {
         this.tipoBien = tipoBien;
-        this.responsable = responsable;
+        this.usuario = usuario;
         this.modelo = modelo;
         this.marca = marca;
         this.codigoBarras = codigoBarras;
@@ -103,12 +103,12 @@ public class Bien {
         this.tipoBien = tipoBien;
     }
 
-    public Usuario getResponsable() {
-        return responsable;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setResponsable(Usuario responsable) {
-        this.responsable = responsable;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public Modelo getModelo() {

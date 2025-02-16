@@ -14,6 +14,7 @@ public class BajaDto {
     @NotBlank(groups = {RegistrarBaja.class, CambiarStatus.class}, message = "Es necesario especificar el motivo")
     private String motivo;
 
+    //Esto se tiene que revisar porque no deberia ser long sino un objeto
     @NotNull(groups = {RegistrarBaja.class, CambiarStatus.class}, message = "Es necesario el bien")
     private Long idBien;
 
