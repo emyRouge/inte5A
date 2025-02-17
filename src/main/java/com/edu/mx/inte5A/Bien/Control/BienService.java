@@ -86,7 +86,7 @@ public class BienService {
         }
 
         List<BienDto> bienesDto = bienes.stream()
-                .map(this::convertToDto) // Usar el método convertToDto que ya tienes
+                .map(this::convertToDto)
                 .collect(Collectors.toList());
 
         logger.info("Listado de bienes completos");
