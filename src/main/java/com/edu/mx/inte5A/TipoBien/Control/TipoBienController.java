@@ -4,6 +4,7 @@ package com.edu.mx.inte5A.TipoBien.Control;
 import com.edu.mx.inte5A.TipoBien.Model.TipoBienDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,36 +13,41 @@ import java.util.List;
 @RequestMapping("/tipo-bien")
 public class TipoBienController {
 
+    private final TipoBienService tipoBienService;
+
     @Autowired
-    private TipoBienService tipoBienService;
+    public TipoBienController(TipoBienService tipoBienService) {
+        this.tipoBienService = tipoBienService;
+    }
 
     @GetMapping
-    public ResponseEntity<List<TipoBienDto>> obtenerTodos() {
-        return ResponseEntity.ok(tipoBienService.buscarTodos());
+    public ResponseEntity<Object> obtenerTodos() {
+        return tipoBienService.buscarTodos();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TipoBienDto> obtenerPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(tipoBienService.buscarPorId(id));
+    public ResponseEntity<Object> obtenerPorId(@PathVariable Long idTipo) {
+        return tipoBienService.buscarPorId(idTipo);
     }
 
     @GetMapping("/nombre/{nombre}")
-    public ResponseEntity<TipoBienDto> obtenerPorNombre(@PathVariable String nombre) {
-        return ResponseEntity.ok(tipoBienService.buscarPorNombre(nombre));
+    public ResponseEntity<Object> obtenerPorNombre(@PathVariable String nombre) {
+        return tipoBienService.buscarPorNombre(nombre);
     }
 
     @PutMapping("/cambiar-status/{id}")
-    public ResponseEntity<TipoBienDto> cambiarStatus(@PathVariable Long id) {
-        return ResponseEntity.ok(tipoBienService.cambiarStatus(id));
+    public ResponseEntity<Object> cambiarStatus(@PathVariable Long idTipo) {
+        return tipoBienService.CambiarStatus(idTipo);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TipoBienDto> actualizar(@PathVariable Long id, @RequestBody TipoBienDto tipoBienDto) {
-        return ResponseEntity.ok(tipoBienService.actualizar(id, tipoBienDto));
+    public ResponseEntity<Object> actualizar(@PathVariable Long idTipo, @Validated (TipoBienDto.CambiarStatus.class) @RequestBody TipoBienDto tipoBienDto) {
+        return tipoBienService.Actualizar(idTipo, tipoBienDto);
     }
 
     @PostMapping
-    public ResponseEntity<TipoBienDto> crear(@RequestBody TipoBienDto tipoBienDto) {
-        return ResponseEntity.ok(tipoBienService.crear(tipoBienDto));
+    public ResponseEntity<Object> crear(@Validated (TipoBienDto.RegistrarTipoBien.class) @RequestBody TipoBienDto tipoBienDto) {
+        return tipoBienService.crearTipo(tipoBienDto);
     }
+
 }

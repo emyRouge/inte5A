@@ -77,12 +77,12 @@ public class UsuarioDto {
     public interface ConsultarRol {}
 
     //Validaciones por añadir
-    public interface Registrarse {}
+    /*public interface Registrarse {}
     public interface IniciarSesion {}
     public interface CerrarSesion {}
     public interface ConsultarPerfilUsuario {}
     public interface ModificarPerfil {}
     public interface ModificarContrasena {}
     public interface VerificarToken {}
-    public interface EnviarEmail {}
+    public interface EnviarEmail {}*/
 }
