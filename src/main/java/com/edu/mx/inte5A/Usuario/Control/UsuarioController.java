@@ -3,6 +3,7 @@ package com.edu.mx.inte5A.Usuario.Control;
 import com.edu.mx.inte5A.Usuario.Model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,36 +12,36 @@ import java.util.List;
 @RequestMapping("/usuarios")
 public class UsuarioController {
 
+    private final UsuarioService usuarioService;
+
     @Autowired
-    private UsuarioService usuarioService;
+    public UsuarioController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UsuarioDto> buscarPorId(@PathVariable Long id) {
-        UsuarioDto usuario = usuarioService.buscarPorId(id);
-        return usuario != null ? ResponseEntity.ok(usuario) : ResponseEntity.notFound().build();
+    public ResponseEntity<Object> buscarPorId(@PathVariable Long idUsuario) {
+        return usuarioService.buscarPorId(idUsuario);
     }
 
     @GetMapping
-    public ResponseEntity<List<UsuarioDto>> buscarTodos() {
-        List<UsuarioDto> usuarios = usuarioService.buscarTodos();
-        return ResponseEntity.ok(usuarios);
+    public ResponseEntity<Object> buscarTodos() {
+        return usuarioService.buscarTodos();
     }
 
     @PostMapping
-    public ResponseEntity<UsuarioDto> crear(@RequestBody Usuario usuario) {
-        UsuarioDto nuevoUsuario = usuarioService.crear(usuario);
-        return ResponseEntity.ok(nuevoUsuario);
+    public ResponseEntity<Object> crearUsuario(@Validated(UsuarioDto.RegistrarUsuario.class) @RequestBody UsuarioDto usuarioDto) {
+        return usuarioService.crear(usuarioDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioDto> actualizar(@PathVariable Long id, @RequestBody Usuario usuarioDetalles) {
-        UsuarioDto usuarioActualizado = usuarioService.actualizar(id, usuarioDetalles);
-        return usuarioActualizado != null ? ResponseEntity.ok(usuarioActualizado) : ResponseEntity.notFound().build();
+    public ResponseEntity<Object> actualizar(@PathVariable Long idUsuario, @Validated(UsuarioDto.ModificarUsuario.class) @RequestBody UsuarioDto usuarioDto) {
+        return usuarioService.Actualizar(idUsuario, usuarioDto);
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<Void> cambiarEstatus(@PathVariable Long id, @RequestParam boolean status) {
-        boolean actualizado = usuarioService.cambiarEstatus(id, status);
-        return actualizado ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+    public ResponseEntity<Object> cambiarEstatus(@PathVariable Long idUsuario,@Validated (UsuarioDto.CambiarStatus.class) @RequestParam boolean status) {
+        return usuarioService.cambiarStatus(idUsuario, status);
     }
+
 }

@@ -13,13 +13,16 @@ public class Baja {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idbaja;
+    private Long idBaja;
 
     @Column(name = "motivo", columnDefinition = "VARCHAR(255)")
     private String motivo;
 
     @Column(name = "fecha", columnDefinition = "DATE")
     private Date fecha;
+
+    @Column(name = "responsable", columnDefinition = "VARCHAR(255)")
+    private String responsable;
 
     @ManyToOne
     @JsonIgnore
@@ -29,8 +32,8 @@ public class Baja {
     public Baja() {
     }
 
-    public Baja(Long idbaja, String motivo, Date fecha, Bien bien) {
-        this.idbaja = idbaja;
+    public Baja(Long idBaja, String motivo, Date fecha, Bien bien) {
+        this.idBaja = idBaja;
         this.motivo = motivo;
         this.fecha = fecha;
         this.bien = bien;
@@ -43,11 +46,11 @@ public class Baja {
     }
 
     public Long getIdbaja() {
-        return idbaja;
+        return idBaja;
     }
 
     public void setIdbaja(Long idbaja) {
-        this.idbaja = idbaja;
+        this.idBaja = idbaja;
     }
 
     public String getMotivo() {

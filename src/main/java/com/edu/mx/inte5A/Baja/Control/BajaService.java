@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -118,6 +119,21 @@ public class BajaService {
         Baja baja = bajaOptional.get();
         logger.info("Baja encontrada correctamente");
         return new ResponseEntity<>(new Message(bajaOptional, "Baja encontrada: "+ idBaja, TypesResponse.SUCCESS), HttpStatus.OK);
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<Object> buscarPorResponsable(String responsable) {
+
+        logger.info("Ejecutando funcion: buscarPorResponsable");
+        List<Baja> bajas = bajaRepository.findByResponsable(responsable);
+
+        if (bajas.isEmpty()) {
+            logger.warn("No se encuentra ninguna baja para el responsable");
+            return new ResponseEntity<>(new Message("No se encontraron bajas para el responsable", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+        }
+
+        logger.info("Bajas encontradas correctamente");
+        return new ResponseEntity<>(new Message(bajas, "Bajas encontradas para el responsable: " + responsable, TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
 }

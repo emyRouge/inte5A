@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 public class UsuarioDto {
 
     @NotNull(groups = {ModificarUsuario.class, CambiarStatus.class}, message = "Es necesario un id para el usuario")
-    private Long idusuario;
+    private Long idUsuario;
 
     @NotBlank(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesaio un nombre para el usuario")
     private String nombre;
@@ -18,17 +18,22 @@ public class UsuarioDto {
     @NotBlank (groups = {RegistrarRol.class, ModificarRol.class}, message = "Es necesario tener un rol asignado")
     private String rol;
 
+    @NotBlank (groups = {RegistrarContrasena.class, ModificarContrasena.class, CambiarContrasena.class}, message = "Es necesario ingresar una contraseña")
+    private String Contrasena;
+
     @NotNull(groups = {RegistrarLugar.class, ModificarLugar.class}, message = "Es necesario tener un lugar seleccionado")
     private Lugar lugar;
+
+    private boolean status;
 
     public UsuarioDto() {}
 
     public Long getIdusuario() {
-        return idusuario;
+        return idUsuario;
     }
 
     public void setIdusuario(Long idusuario) {
-        this.idusuario = idusuario;
+        this.idUsuario = idusuario;
     }
 
     public String getNombre() {
@@ -63,6 +68,22 @@ public class UsuarioDto {
         this.lugar = lugar;
     }
 
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public String getContrasena() {
+        return Contrasena;
+    }
+
+    public void setContrasena(String Contrasena) {
+        this.Contrasena = Contrasena;
+    }
+
     //Validaciones
     public interface RegistrarUsuario {}
     public interface ModificarUsuario {}
@@ -75,6 +96,10 @@ public class UsuarioDto {
     public interface RegistrarRol {}
     public interface ModificarRol {}
     public interface ConsultarRol {}
+
+    public interface CambiarContrasena{}
+    public interface ModificarContrasena {}
+    public interface RegistrarContrasena {}
 
     //Validaciones por añadir
     /*public interface Registrarse {}

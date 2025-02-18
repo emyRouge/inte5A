@@ -1,15 +1,11 @@
 // BajaController.java
 package com.edu.mx.inte5A.Baja.Control;
 
-import com.edu.mx.inte5A.Baja.Model.Baja;
 import com.edu.mx.inte5A.Baja.Model.BajaDto;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/bajas")
@@ -41,6 +37,5 @@ public class BajaController {
     public ResponseEntity<Object> buscarPorId(@PathVariable Long idBaja) {
         return bajaService.buscarPorId(idBaja);
     }
-
 
 }

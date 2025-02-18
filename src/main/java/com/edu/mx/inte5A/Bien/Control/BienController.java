@@ -24,10 +24,10 @@ public class BienController {
     }
 
     //Este esta mal luego lo corrijo
-    @GetMapping("/responsable/{idResponsable}")
+    /*@GetMapping("/responsable/{idResponsable}")
     public ResponseEntity<Object> obtenerUsuario(@PathVariable Long idUsuario) {
         return bienService.obtenerId(idUsuario);
-    }
+    }*/
 
     @GetMapping
     public ResponseEntity<Object> obtenerTodosLosBienes() {
