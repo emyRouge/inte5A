@@ -35,4 +35,14 @@ public class UsuarioController {
         return usuarioService.crearUsuario(usuarioDto);
     }
 
+    @PutMapping("/{idUsuario}")
+    public ResponseEntity<Object> actualizar(@PathVariable Long idUsuario, @Validated(UsuarioDto.ModificarUsuario.class) @RequestBody UsuarioDto usuarioDto) {
+        return usuarioService.actualizar(idUsuario, usuarioDto);
+    }
+
+    @PatchMapping("/{idUsuario}/status")
+    public ResponseEntity<Object> cambiarEstatus(@Validated(UsuarioDto.CambiarStatus.class) @PathVariable Long idUsuario) {
+        return usuarioService.cambiarStatus(idUsuario);
+    }
+
 }

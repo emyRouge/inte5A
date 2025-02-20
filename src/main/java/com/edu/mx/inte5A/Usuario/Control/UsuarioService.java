@@ -78,6 +78,26 @@ public class UsuarioService {
                     return new RuntimeException("Lugar no encontrado");
                 });
 
+        if (usuarioDto.getNombre().length() > 100) {
+            logger.info("Error al actualizar nombre");
+            return new ResponseEntity<>(new Message("El nombre no puede acceder los 100 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        }
+
+        if (usuarioDto.getUsuario().length() > 45) {
+            logger.info("Error al actualizar usuario");
+            return new ResponseEntity<>(new Message("El usuario no puede acceder los 45 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        }
+
+        if (usuarioDto.getContrasena().length() > 255) {
+            logger.info("Error al actualizar contrasena");
+            return new ResponseEntity<>(new Message("La contraseña no puede tener mas de 255 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        }
+
+        if (usuarioDto.getRol().length() > 45) {
+            logger.info("Error al actualizar rol");
+            return new ResponseEntity<>(new Message("El rol no puede tener mas de 45 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        }
+
         Usuario usuario = new Usuario();
         usuario.setNombre(usuarioDto.getNombre());
         usuario.setUsuario(usuarioDto.getUsuario());
@@ -96,4 +116,85 @@ public class UsuarioService {
         return new ResponseEntity<>(new Message(usuario, "Usuario guardado exitosamente", TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
+    @Transactional(rollbackFor = {SQLException.class})
+    public ResponseEntity<Object> actualizar(Long idUsuario, UsuarioDto usuarioDto) {
+        logger.info("Ejecutando funcion: actualizar");
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);
+
+        if (usuarioOptional.isEmpty()) {
+            logger.info("No se encontro el usuario");
+            return new ResponseEntity<>(new Message("No se encontro el usuario", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+        }
+
+        if (usuarioDto.getNombre().length() > 100) {
+            logger.info("Error al actualizar nombre");
+            return new ResponseEntity<>(new Message("El nombre no puede acceder los 100 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        }
+
+        if (usuarioDto.getUsuario().length() > 45) {
+            logger.info("Error al actualizar usuario");
+            return new ResponseEntity<>(new Message("El usuario no puede acceder los 45 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        }
+
+        if (usuarioDto.getContrasena().length() > 255) {
+            logger.info("Error al actualizar contrasena");
+            return new ResponseEntity<>(new Message("La contraseña no puede tener mas de 255 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        }
+
+        if (usuarioDto.getRol().length() > 45) {
+            logger.info("Error al actualizar rol");
+            return new ResponseEntity<>(new Message("El rol no puede tener mas de 45 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        }
+
+        if (usuarioDto.getIdLugar() != null) {
+            Optional<Lugar> lugarOptional = lugarRepository.findById(usuarioDto.getIdLugar());
+
+            if (lugarOptional.isEmpty()) {
+                logger.info("No se encontro el lugar");
+                return new ResponseEntity<>(new Message("No se encontro el lugar", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        Usuario usuario = new Usuario();
+        usuario.setIdusuario(idUsuario);
+        usuario.setNombre(usuarioDto.getNombre());
+        usuario.setUsuario(usuarioDto.getUsuario());
+        usuario.setContrasena(usuarioDto.getContrasena());
+        usuario.setRol(usuarioDto.getRol());
+
+        if (usuarioDto.getIdLugar() != null) {
+            Lugar lugar = lugarRepository.findById(usuarioDto.getIdLugar()).
+                    orElseThrow(() ->  { logger.info("No se encontro el lugar");
+                    return new RuntimeException("Lugar no encontrado");
+                    });
+        }
+
+        usuario = usuarioRepository.saveAndFlush(usuario);
+
+        logger.info("Usuario actualizado correctamente");
+        return new ResponseEntity<>(new Message(usuario, "El usuario se ha actualizado correctamente", TypesResponse.SUCCESS), HttpStatus.OK);
+
+    }
+
+    @Transactional(rollbackFor = {SQLException.class})
+    public ResponseEntity<Object> cambiarStatus(Long idUsuario) {
+        logger.info("Ejecutando funcion: Cambiar status del usuario");
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);
+
+        if (usuarioOptional.isEmpty()) {
+            logger.info("No se encontro el usuario");
+            return new ResponseEntity<>(new Message("El usuario no existe", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+        }
+
+        Usuario usuario = usuarioOptional.get();
+        usuario.setStatus(!usuario.isStatus());
+        usuario = usuarioRepository.saveAndFlush(usuario);
+
+        if (usuario == null) {
+            return new ResponseEntity<>(new Message("El estado no se actualizo", TypesResponse.ERROR), HttpStatus.BAD_REQUEST);
+        }
+
+        logger.info("Estado de usuario actualizado correctamente");
+        return new ResponseEntity<>(new Message(usuario,"El estado se actualizo correctamente",TypesResponse.SUCCESS), HttpStatus.OK);
+    }
 }

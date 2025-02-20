@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 
 public class UsuarioDto {
 
-    @NotNull(groups = {ModificarUsuario.class, CambiarStatus.class}, message = "Es necesario un id para el usuario")
+    @NotNull(groups = {CambiarStatus.class}, message = "Es necesario un id para el usuario")
     private Long idUsuario;
 
     @NotBlank(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesaio un nombre para el usuario")
@@ -22,7 +22,7 @@ public class UsuarioDto {
     @NotBlank (groups = {RegistrarContrasena.class, ModificarContrasena.class, CambiarContrasena.class}, message = "Es necesario ingresar una contraseña")
     private String Contrasena;
 
-    @NotNull(groups = {RegistrarLugar.class, ModificarLugar.class}, message = "Es necesario tener un lugar seleccionado")
+    @NotNull(groups = {RegistrarLugar.class, ModificarUsuario.class}, message = "Es necesario tener un lugar seleccionado")
     private Long idLugar;
 
     private boolean status;
