@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 
 public class AreaComunDto {
 
-    @NotNull(groups = {ModificarArea.class,CambiarStatus.class}, message = "Es necesario el id")
+    @NotNull(groups = {CambiarStatus.class}, message = "Es necesario el id")
     private Long idArea;
 
     @NotBlank(groups = {RegistrarArea.class,ModificarArea.class}, message = "Es necesario el nombre del area")

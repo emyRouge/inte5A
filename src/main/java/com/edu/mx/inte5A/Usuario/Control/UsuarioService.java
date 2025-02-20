@@ -1,6 +1,9 @@
 package com.edu.mx.inte5A.Usuario.Control;
 
 import com.edu.mx.inte5A.Bien.Model.BienDto;
+import com.edu.mx.inte5A.Lugar.Model.Lugar;
+import com.edu.mx.inte5A.Lugar.Model.LugarDto;
+import com.edu.mx.inte5A.Lugar.Model.LugarRepository;
 import com.edu.mx.inte5A.Usuario.Model.*;
 import com.edu.mx.inte5A.utils.Message;
 import com.edu.mx.inte5A.utils.TypesResponse;
@@ -22,10 +25,12 @@ public class UsuarioService {
 
     private static final Logger logger = LoggerFactory.getLogger(UsuarioService.class);
     private final UsuarioRepository usuarioRepository;
+    private final LugarRepository lugarRepository;
 
     @Autowired
-    public UsuarioService(UsuarioRepository usuarioRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository, LugarRepository lugarRepository) {
         this.usuarioRepository = usuarioRepository;
+        this.lugarRepository = lugarRepository;
     }
 
     @Transactional(readOnly = true)
@@ -38,15 +43,14 @@ public class UsuarioService {
             return new ResponseEntity<>(new Message("No se encontro el usuario", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
         }
 
-        UsuarioDto usuarioDto = convertToUsuarioDto(usuarioOptional.get());
+        Usuario usuario = usuarioOptional.get();
         logger.info("Se encotro el id del usuario");
-        return new ResponseEntity<>(new Message(usuarioDto, "El usuario se encontro exitosamente", TypesResponse.SUCCESS), HttpStatus.OK);
+        return new ResponseEntity<>(new Message(usuario, "El usuario se encontro exitosamente", TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
     @Transactional(readOnly = true)
     public ResponseEntity<Object> buscarTodos() {
         logger.info("Ejecuntando funcion: buscarTodos");
-
         List<Usuario> usuarios = usuarioRepository.findAll();
 
         if (usuarios.isEmpty()) {
@@ -54,17 +58,25 @@ public class UsuarioService {
             return new ResponseEntity<>(new Message("El usuario no existe", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
         }
 
-        List<UsuarioDto> usuarioDtos = usuarios.stream()
-                .map(this::convertToUsuarioDto)
-                .collect(Collectors.toList());
-
         logger.info("Listado de usuarios");
-        return new ResponseEntity<>(new Message(usuarioDtos, "Listado de usuarios", TypesResponse.SUCCESS), HttpStatus.OK);
+        return new ResponseEntity<>(new Message(usuarios, "Listado de usuarios", TypesResponse.SUCCESS), HttpStatus.OK);
+
     }
 
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<Object> crear(UsuarioDto usuarioDto) {
-        logger.info("Ejecutando funcion: crear");
+    public ResponseEntity<Object> crearUsuario(UsuarioDto usuarioDto) {
+        logger.info("Ejecutando la funcion: crearUsuario");
+
+        if (usuarioDto.getIdLugar() == null) {
+            logger.error("El ID del lugar no puede ser nulo");
+            return new ResponseEntity<>(new Message("El ID del lugar no puede ser nulo", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        }
+
+        Lugar lugar = lugarRepository.findById(usuarioDto.getIdLugar())
+                .orElseThrow(() -> {
+                    logger.error("Lugar no encontrado con ID: {}", usuarioDto.getIdLugar());
+                    return new RuntimeException("Lugar no encontrado");
+                });
 
         Usuario usuario = new Usuario();
         usuario.setNombre(usuarioDto.getNombre());
@@ -72,81 +84,16 @@ public class UsuarioService {
         usuario.setContrasena(usuarioDto.getContrasena());
         usuario.setStatus(usuarioDto.isStatus());
         usuario.setRol(usuarioDto.getRol());
-        usuario.setLugar(usuarioDto.getLugar());
+        usuario.setLugar(lugar);
+
         usuario = usuarioRepository.saveAndFlush(usuario);
 
-        UsuarioDto nuevoUsuarioDto = convertToUsuarioDto(usuario);
-        logger.info("Se creo el usuario");
-        return new ResponseEntity<>(new Message(nuevoUsuarioDto, "Usuario guardado exitosamente", TypesResponse.SUCCESS), HttpStatus.OK);
-    }
-
-    @Transactional(rollbackFor ={SQLException.class})
-    public ResponseEntity<Object> Actualizar (Long idUsuario, UsuarioDto usuarioDto) {
-        logger.info("Ejecutando funcion: Actualizar");
-
-        Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);
-        if (usuarioOptional.isEmpty()) {
-            logger.info("No se encontro el usuario");
-            return new ResponseEntity<>(new Message("No se encontro el usuario", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+        if  (usuario == null) {
+            return new ResponseEntity<>(new Message("El usuario no se registro", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
         }
 
-        Usuario usuario = usuarioOptional.get();
-
-        if (usuarioDto.getNombre() != null) {
-            usuario.setNombre(usuarioDto.getNombre());
-        }
-
-        if (usuarioDto.getUsuario() != null) {
-            usuario.setUsuario(usuarioDto.getUsuario());
-        }
-
-        if (usuarioDto.getContrasena() != null) {
-            usuario.setContrasena(usuarioDto.getContrasena());
-        }
-
-        if (usuarioDto.getRol() != null) {
-            usuario.setStatus(usuarioDto.isStatus());
-        }
-
-        if (usuarioDto.getLugar() != null) {
-            usuario.setLugar(usuarioDto.getLugar());
-        }
-
-        usuario.setStatus(usuarioDto.isStatus());
-        usuario = usuarioRepository.saveAndFlush(usuario);
-        UsuarioDto updatedUsuario = convertToUsuarioDto(usuario);
-
-        logger.info("Se actualizo el usuario");
-        return new ResponseEntity<>(new Message(updatedUsuario,"El usuario se actualizo correctamente", TypesResponse.SUCCESS),HttpStatus.OK);
-    }
-
-    @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<Object> cambiarStatus(Long idUsuario, boolean status) {
-        logger.info("Ejecutando funcion: Cambiar status del usuario");
-
-        Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);
-        if (usuarioOptional.isPresent()) {
-            logger.info("No se encontro el usuario");
-            return new ResponseEntity<>(new Message("No se encontro el usuario", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
-        }
-
-        Usuario usuario = usuarioOptional.get();
-        usuario.setStatus(status);
-        usuario = usuarioRepository.saveAndFlush(usuario);
-
-        logger.info("Se cambio el status del usuario");
-        return new ResponseEntity<>(new Message(usuario, "Se cambio el status del usuario exitosamente", TypesResponse.SUCCESS), HttpStatus.OK);
-    }
-
-    private UsuarioDto convertToUsuarioDto(Usuario usuario) {
-        UsuarioDto usuarioDto = new UsuarioDto();
-        usuarioDto.setIdusuario(usuario.getIdusuario());
-        usuarioDto.setNombre(usuario.getNombre());
-        usuarioDto.setUsuario(usuario.getUsuario());
-        usuarioDto.setStatus(usuario.isStatus());
-        usuarioDto.setRol(usuario.getRol());
-        usuarioDto.setLugar(usuario.getLugar());
-        return usuarioDto;
+        logger.info("Se creó el usuario");
+        return new ResponseEntity<>(new Message(usuario, "Usuario guardado exitosamente", TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
 }

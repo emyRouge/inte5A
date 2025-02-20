@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 
 public class MarcaDto {
 
-    @NotNull(groups = {ModificarMarca.class, CambiarStatus.class}, message = "Es necesario el id de la marca")
+    @NotNull(groups = {CambiarStatus.class}, message = "Es necesario el id de la marca")
     private Long idMarca;
 
     @NotBlank(groups = {RegistrarMarca.class, ModificarMarca.class}, message = "Es necesario el nombre de la marca")

@@ -1,6 +1,7 @@
 package com.edu.mx.inte5A.Usuario.Model;
 
 import com.edu.mx.inte5A.Lugar.Model.Lugar;
+import com.edu.mx.inte5A.Lugar.Model.LugarDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -22,7 +23,7 @@ public class UsuarioDto {
     private String Contrasena;
 
     @NotNull(groups = {RegistrarLugar.class, ModificarLugar.class}, message = "Es necesario tener un lugar seleccionado")
-    private Lugar lugar;
+    private Long idLugar;
 
     private boolean status;
 
@@ -60,12 +61,12 @@ public class UsuarioDto {
         this.rol = rol;
     }
 
-    public Lugar getLugar() {
-        return lugar;
+    public Long getIdLugar() {
+        return idLugar;
     }
 
-    public void setLugar(Lugar lugar) {
-        this.lugar = lugar;
+    public void setIdLugar(Long idLugar) {
+        this.idLugar = idLugar;
     }
 
     public boolean isStatus() {

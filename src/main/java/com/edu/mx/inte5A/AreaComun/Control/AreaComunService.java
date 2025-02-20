@@ -116,9 +116,9 @@ public class AreaComunService {
 
     //Cambiar status
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<Object> cambiarStatus(Long idLugar) {
+    public ResponseEntity<Object> cambiarStatus(Long idArea) {
         logger.info("Ejecutando funcion: cambiarStatus");
-        Optional<AreaComun> optional = areaComunRepository.findById(idLugar);
+        Optional<AreaComun> optional = areaComunRepository.findById(idArea);
 
         if (!optional.isPresent()) {
             logger.error("No se encontro el area de comun");

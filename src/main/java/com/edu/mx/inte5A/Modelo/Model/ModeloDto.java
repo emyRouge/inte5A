@@ -7,10 +7,10 @@ import jakarta.validation.constraints.NotNull;
 
 public class ModeloDto {
 
-    @NotNull(groups = {ModificarModelo.class, CambiarStatus.class})
+    @NotNull(groups = {CambiarStatus.class}, message = "Es necesario el id del  modelo")
     private Long idModelo;
 
-    @NotBlank(groups = {RegistrarModelo.class, ModificarModelo.class})
+    @NotBlank(groups = {RegistrarModelo.class}, message = "Es necesario el nombre de la marca")
     private String nombreModelo;
 
     private byte[] foto;

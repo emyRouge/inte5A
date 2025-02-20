@@ -25,7 +25,7 @@ public class ModeloController {
         return modeloService.buscarTodos();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{idModelo}")
     public ResponseEntity<Object> obtenerPorId(@PathVariable Long idModelo) {
         return modeloService.buscarPorId(idModelo);
     }
@@ -35,12 +35,12 @@ public class ModeloController {
         return modeloService.buscarPorNombre(nombreModelo);
     }
 
-    @PutMapping("/cambiar-status/{id}")
+    @PutMapping("/cambiar-status/{idModelo}")
     public ResponseEntity<Object> cambiarStatus(@Validated (ModeloDto.CambiarStatus.class) @PathVariable Long idModelo) {
         return modeloService.cambiarStatus(idModelo);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{idModelo}")
     public ResponseEntity<Object> actualizar(@PathVariable Long idModelo, @Validated(ModeloDto.ModificarModelo.class) @RequestBody ModeloDto modeloDto) {
         return modeloService.Actualizar(idModelo, modeloDto);
     }

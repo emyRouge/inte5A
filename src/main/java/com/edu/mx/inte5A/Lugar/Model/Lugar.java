@@ -10,7 +10,7 @@ public class Lugar {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idlugar;
+    private Long idLugar;
 
     @Column(name = "lugar", nullable = false, length = 50)
     private String lugar;
@@ -23,8 +23,8 @@ public class Lugar {
 
     public Lugar() {}
 
-    public Lugar(Long idlugar, String lugar, boolean status, List<AreaComun> areas) {
-        this.idlugar = idlugar;
+    public Lugar(Long idLugar, String lugar, boolean status, List<AreaComun> areas) {
+        this.idLugar = idLugar;
         this.lugar = lugar;
         this.status = status;
         this.areas = areas;
@@ -37,11 +37,11 @@ public class Lugar {
     }
 
     public Long getIdlugar() {
-        return idlugar;
+        return idLugar;
     }
 
     public void setIdlugar(Long idlugar) {
-        this.idlugar = idlugar;
+        this.idLugar = idlugar;
     }
 
     public String getLugar() {
@@ -59,4 +59,5 @@ public class Lugar {
     public void setStatus(boolean status) {
         this.status = status;
     }
+
 }

@@ -112,7 +112,7 @@ public class ModeloService {
         logger.info("Ejucatando funcion: Actualizar");
         Optional<Modelo> modeloOptional = modeloRepository.findById(idModelo);
 
-        if(modeloOptional.isPresent()){
+        if(modeloOptional.isEmpty()){
             logger.info("Modelo no encontrado");
             return new ResponseEntity<>(new Message("El modelo no se encontro",TypesResponse.WARNING), HttpStatus.NOT_FOUND);
         }

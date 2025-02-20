@@ -18,17 +18,17 @@ public class AreaComunController {
         this.areaComunService = areaComunService;
     }
 
-    @PostMapping("/{id}/status")
+    @PostMapping
     public ResponseEntity<Object> crearAreaComun(@Validated(AreaComunDto.RegistrarArea.class) @RequestBody AreaComunDto areaComunDto) {
         return areaComunService.guardarArea(areaComunDto);
     }
 
-    @PatchMapping("/{id}/status")
-    public ResponseEntity<Object> cambiarStatus(@Validated(AreaComunDto.CambiarStatus.class) @PathVariable Long idLugar) {
-        return areaComunService.cambiarStatus(idLugar);
+    @PatchMapping("/{idArea}/status")
+    public ResponseEntity<Object> cambiarStatus(@Validated(AreaComunDto.CambiarStatus.class) @PathVariable Long idArea) {
+        return areaComunService.cambiarStatus(idArea);
     }
 
-    @PutMapping("/{id}/lugar/{idLugar}")
+    @PutMapping("/{idArea}/lugar/{idLugar}")
     public ResponseEntity<Message> asignarLugar(@PathVariable Long idArea, @PathVariable Long idLugar) {
         return areaComunService.asignarLugar(idArea, idLugar);
     }

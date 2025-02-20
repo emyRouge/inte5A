@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 public class LugarDto {
 
-    @NotNull(groups = {ModificarLugar.class, CambiarStatus.class}, message = "Es necesario el id del lugar")
+    @NotNull(groups = { CambiarStatus.class}, message = "Es necesario el id del lugar")
     private Long idLugar;
 
     @NotBlank(groups = {RegistrarLugar.class, CambiarStatus.class}, message = "Es necesario el nombre del lugar")
@@ -44,7 +44,7 @@ public class LugarDto {
     public void setStatus(boolean status) {
         this.status = status;
     }
-
+    
     //Validaciones
     public interface RegistrarLugar {}
     public interface ModificarLugar {}

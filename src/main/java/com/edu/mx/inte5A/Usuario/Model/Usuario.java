@@ -26,15 +26,15 @@ public class Usuario {
     @Column(name = "rol", columnDefinition = "VARCHAR(45)")
     private String rol;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idLugar", nullable = true)
     private Lugar lugar;
 
     public Usuario() {
     }
 
-    public Usuario(Long idusuario, String nombre, String usuario, String contrasena, boolean status, String rol, Lugar lugar) {
-        this.idUsuario = idusuario;
+    public Usuario(Long idUsuario, String nombre, String usuario, String contrasena, boolean status, String rol, Lugar lugar) {
+        this.idUsuario = idUsuario;
         this.nombre = nombre;
         this.usuario = usuario;
         this.contrasena = contrasena;

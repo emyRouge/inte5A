@@ -25,7 +25,7 @@ public class MarcaController {
         return marcaService.buscarTodos();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{idMarca}")
     public ResponseEntity<Object> obtenerPorId(@PathVariable Long idMarca) {
         return marcaService.buscarPorId(idMarca);
     }
@@ -35,12 +35,12 @@ public class MarcaController {
         return marcaService.buscarPorNombre(nombre);
     }
 
-    @PutMapping("/cambiar-status/{id}")
+    @PutMapping("/cambiar-status/{idMarca}")
     public ResponseEntity<Object> cambiarStatus(@Validated(MarcaDto.CambiarStatus.class) @PathVariable Long idMarca) {
         return marcaService.cambiarStatus(idMarca);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{idMarca}")
     public ResponseEntity<Object> actualizar(@PathVariable Long idMarca, @Validated(MarcaDto.ModificarMarca.class) @RequestBody MarcaDto marcaDto) {
         return marcaService.Actualizar(idMarca, marcaDto);
     }

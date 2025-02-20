@@ -82,11 +82,13 @@ public class LugarService {
     @Transactional(readOnly = true)
     public ResponseEntity <Object> buscarPorId(Long idLugar) {
         logger.info("Ejecutando funcion: BuscarPorId");
+
         Optional<Lugar> lugarOptional = lugarRepository.findById(idLugar);
         if (lugarOptional.isEmpty()) {
             logger.warn("No se encuentra el lugar");
             return new ResponseEntity<>(new Message("El lugar no existe", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
         }
+
         Lugar lugar = lugarOptional.get();
         LugarDto lugarDto = new LugarDto(lugar.getIdlugar(), lugar.getLugar(), lugar.isStatus());
         logger.info("Lugar encontrado exitosamente");
