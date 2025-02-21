@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotNull;
 
 public class TipoBienDto {
 
-    @NotNull(groups = {ModificarTipoBien.class, CambiarStatus.class}, message = "Es necesario el id del tipo de bien")
     private Long idTipo;
 
     @NotBlank(groups = {RegistrarTipoBien.class, ModificarTipoBien.class}, message = "Es necesario el nombre del tipo de bien")

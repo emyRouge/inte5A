@@ -25,7 +25,7 @@ public class TipoBienController {
         return tipoBienService.buscarTodos();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{idTipo}")
     public ResponseEntity<Object> obtenerPorId(@PathVariable Long idTipo) {
         return tipoBienService.buscarPorId(idTipo);
     }
@@ -35,13 +35,15 @@ public class TipoBienController {
         return tipoBienService.buscarPorNombre(nombre);
     }
 
-    @PutMapping("/cambiar-status/{id}")
+    @PutMapping("/cambiar-status/{idTipo}")
     public ResponseEntity<Object> cambiarStatus(@PathVariable Long idTipo) {
         return tipoBienService.CambiarStatus(idTipo);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Object> actualizar(@PathVariable Long idTipo, @Validated (TipoBienDto.CambiarStatus.class) @RequestBody TipoBienDto tipoBienDto) {
+    @PutMapping("/{idTipo}")
+    public ResponseEntity<Object> actualizar(@PathVariable Long idTipo,
+                                             @Validated (TipoBienDto.ModificarTipoBien.class)
+                                             @RequestBody TipoBienDto tipoBienDto) {
         return tipoBienService.Actualizar(idTipo, tipoBienDto);
     }
 

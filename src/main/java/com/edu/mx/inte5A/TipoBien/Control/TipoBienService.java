@@ -51,11 +51,10 @@ public class TipoBienService {
             logger.info("No se encuentra el tipo de bien");
             return new ResponseEntity<>(new Message("El bien no se encontro", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
         }
-        TipoBien tipoBien = tipoBienOptional.get();
-        TipoBienDto tipoBienDto = new TipoBienDto(tipoBien.getIdTipo(), tipoBien.getNombre(), tipoBien.isStatus());
 
+        TipoBien tipoBien = tipoBienOptional.get();
         logger.info("Tipo de Bien encontrado");
-        return new ResponseEntity<>(new Message(tipoBienDto, "El id de Tipo de bien encontrado exitosamente", TypesResponse.SUCCESS), HttpStatus.OK);
+        return new ResponseEntity<>(new Message(tipoBien, "El id de Tipo de bien encontrado exitosamente", TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
     @Transactional(readOnly = true)
@@ -86,7 +85,7 @@ public class TipoBienService {
         }
 
         TipoBien tipoBien = tipoBienOptional.get();
-        tipoBien.setStatus(tipoBien.isStatus());
+        tipoBien.setStatus(!tipoBien.isStatus());
         tipoBienRepository.saveAndFlush(tipoBien);
 
         TipoBienDto tipoBienDto = new TipoBienDto(tipoBien.getIdTipo(), tipoBien.getNombre(), tipoBien.isStatus());
@@ -97,7 +96,7 @@ public class TipoBienService {
     @Transactional(rollbackFor ={SQLException.class})
     public ResponseEntity <Object> Actualizar(Long idTipo, TipoBienDto tipoBienDto) {
 
-        logger.info("Ejecutando funcion");
+        logger.info("Ejecutando funcion: Actualizar");
         Optional<TipoBien> tipoBienOptional = tipoBienRepository.findById(idTipo);
         if (!tipoBienOptional.isPresent()) {
             logger.info("No se encontro el tipo de bien");
