@@ -21,13 +21,13 @@ public class UsuarioController {
     }
 
     @GetMapping("/{idUsuario}")
-    public ResponseEntity<Object> buscarPorId(@PathVariable Long idUsuario) {
-        return usuarioService.buscarPorId(idUsuario);
+    public ResponseEntity<Object> buscarUsuarioPorId(@PathVariable Long idUsuario) {
+        return usuarioService.buscarUsuarioPorId(idUsuario);
     }
 
     @GetMapping
-    public ResponseEntity<Object> buscarTodos() {
-        return usuarioService.buscarTodos();
+    public ResponseEntity<Object> buscarTodosLosUsuarios() {
+        return usuarioService.buscarTodosLosUsuarios();
     }
 
     @PostMapping
@@ -36,13 +36,13 @@ public class UsuarioController {
     }
 
     @PutMapping("/{idUsuario}")
-    public ResponseEntity<Object> actualizar(@PathVariable Long idUsuario, @Validated(UsuarioDto.ModificarUsuario.class) @RequestBody UsuarioDto usuarioDto) {
-        return usuarioService.actualizar(idUsuario, usuarioDto);
+    public ResponseEntity<Object> actualizarUsuario(@PathVariable Long idUsuario, @Validated(UsuarioDto.ModificarUsuario.class) @RequestBody UsuarioDto usuarioDto) {
+        return usuarioService.actualizarUsuario(idUsuario, usuarioDto);
     }
 
     @PatchMapping("/{idUsuario}/status")
-    public ResponseEntity<Object> cambiarEstatus(@Validated(UsuarioDto.CambiarStatus.class) @PathVariable Long idUsuario) {
-        return usuarioService.cambiarStatus(idUsuario);
+    public ResponseEntity<Object> cambiarStatusUsuario(@Validated(UsuarioDto.CambiarStatus.class) @PathVariable Long idUsuario) {
+        return usuarioService.cambiarStatusUsuario(idUsuario);
     }
 
 }

@@ -1,25 +1,21 @@
 package com.edu.mx.inte5A.Bien.Control;
-import com.edu.mx.inte5A.AreaComun.Model.AreaComunDto;
+
 import com.edu.mx.inte5A.Bien.Model.Bien;
 import com.edu.mx.inte5A.Bien.Model.BienDto;
 import com.edu.mx.inte5A.Bien.Model.BienRepository;
 import com.edu.mx.inte5A.Lugar.Model.Lugar;
-import com.edu.mx.inte5A.Lugar.Model.LugarDto;
 import com.edu.mx.inte5A.Lugar.Model.LugarRepository;
 import com.edu.mx.inte5A.Marca.Model.Marca;
-import com.edu.mx.inte5A.Marca.Model.MarcaDto;
 import com.edu.mx.inte5A.Marca.Model.MarcaRepository;
 import com.edu.mx.inte5A.Modelo.Model.Modelo;
-import com.edu.mx.inte5A.Modelo.Model.ModeloDto;
 import com.edu.mx.inte5A.Modelo.Model.ModeloRepository;
 import com.edu.mx.inte5A.TipoBien.Model.TipoBien;
-import com.edu.mx.inte5A.TipoBien.Model.TipoBienDto;
 import com.edu.mx.inte5A.TipoBien.Model.TipoBienRepository;
 import com.edu.mx.inte5A.Usuario.Model.Usuario;
-import com.edu.mx.inte5A.Usuario.Model.UsuarioDto;
 import com.edu.mx.inte5A.Usuario.Model.UsuarioRepository;
 import com.edu.mx.inte5A.utils.Message;
 import com.edu.mx.inte5A.utils.TypesResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +25,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class BienService {
@@ -57,163 +53,275 @@ public class BienService {
         this.lugarRepository = lugarRepository;
     }
 
-    //Obtener por id
-    @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<Object> obtenerId(Long idBien) {
-        logger.info("Ejecuntando funcion: obtenerId");
-
-        Optional<Bien> bienOptional = bienRepository.findById(idBien);
-        if (bienOptional.isEmpty()) {
-            logger.info("No se encontro el bien");
-            return new ResponseEntity<>(new Message("No se encontro el bien", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
-        }
-
-        BienDto bienDto = convertToDto(bienOptional.get());
-        logger.info("Ejecuntando funcion: obtenerId");
-        return new ResponseEntity<>(new Message(bienDto, "", TypesResponse.SUCCESS), HttpStatus.OK);
-    }
-
-    //Obtener todo
     @Transactional(readOnly = true)
     public ResponseEntity<Object> buscarTodos() {
         logger.info("Ejecutando funcion: buscarTodos");
-
         List<Bien> bienes = bienRepository.findAll();
 
         if (bienes.isEmpty()) {
             logger.info("No se encontro el bien");
-            return new ResponseEntity<>(new Message("Los bienes no se encontraron", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new Message("El bien no existe", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
         }
 
-        List<BienDto> bienesDto = bienes.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-
-        logger.info("Listado de bienes completos");
-        return new ResponseEntity<>(new Message(bienesDto, "Listado de bienes", TypesResponse.SUCCESS), HttpStatus.OK);
+        logger.info("Listado de bienes");
+        return new ResponseEntity<>(new Message(bienes, "Listado completo de bienes", TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
-    //Crear bien
+    @Transactional(readOnly = true)
+    public ResponseEntity<Object> buscarPorId(Long idBien) {
+        logger.info("Ejecutando funcion: buscarPorId");
+
+        Optional<Bien> bienOptional = bienRepository.findById(idBien);
+        if (bienOptional.isEmpty()) {
+            logger.info("No se encontro el bien");
+            return new ResponseEntity<>(new Message("El bien no existe", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+        }
+
+        Bien bien = bienOptional.get();
+        logger.info("Se encontro el id del bien");
+        return new ResponseEntity<>(new Message(bien,"El bien se encontro exitosamente", TypesResponse.SUCCESS), HttpStatus.OK);
+    }
+
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<Object> crear(BienDto bienDto) {
-        logger.info("Ejecuntando funcion: crear");
+    public ResponseEntity<Object> crearBien(BienDto bienDto) {
+        logger.info("Ejecutando funcion: crear bien");
+
+        if (bienDto.getIdTipoBien() == null) {
+            logger.info("El ID del tipo de bien no puede ser nullo");
+            return new ResponseEntity<>(new Message("El ID del tipo de bien no puede ser nullo", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        }
+
+        if (bienDto.getIdUsuario() == null) {
+            logger.info("El ID del usuario no puede ser nullo");
+            return new ResponseEntity<>(new Message("El ID del usuario no puede ser nullo", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        }
+
+        if (bienDto.getIdModelo() == null) {
+            logger.info("El ID del modelo no puede ser nullo");
+            return new ResponseEntity<>(new Message("El ID del modelo no puede ser nullo", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        }
+
+        if (bienDto.getIdMarca() == null) {
+            logger.info("El ID de la marca no puede ser nullo");
+            return new ResponseEntity<>(new Message("El ID de la marca no puede ser nullo", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        }
+
+        if (bienDto.getIdLugar() == null) {
+            logger.error("El ID del lugar no puede ser nullo");
+            return new ResponseEntity<>(new Message("El ID del lugar no puede ser nullo", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        }
+
+        TipoBien tipoBien = tipoBienRepository.findById(bienDto.getIdTipoBien())
+                .orElseThrow(() -> {
+                   logger.info("tipo de bien no encontrado con ID", bienDto.getIdTipoBien());
+                   return new RuntimeException("Tipo de bien no encontrado");
+                });
+
+        Usuario usuario = usuarioRepository.findById(bienDto.getIdUsuario())
+                .orElseThrow(()-> {
+                    logger.info("usuario no encontrado con ID", bienDto.getIdUsuario());
+                    return new RuntimeException("Usuario no encontrado");
+                });
+
+        Modelo modelo = modeloRepository.findById(bienDto.getIdModelo())
+                .orElseThrow(()-> {
+                    logger.info("mode no encontrado con ID", bienDto.getIdModelo());
+                    return new RuntimeException("Modelo no encontrado");
+                });
+
+        Marca marca = marcaRepository.findById(bienDto.getIdMarca())
+                .orElseThrow(()->{
+                    logger.info("marca no encontrado con ID", bienDto.getIdMarca());
+                    return new RuntimeException("Marca no encontrado");
+                });
+
+        Lugar lugar = lugarRepository.findById(bienDto.getIdLugar())
+                .orElseThrow(()->{
+                    logger.info("lugar no encontrado con ID", bienDto.getIdLugar());
+                    return new RuntimeException("Lugar no encontrado");
+                });
+
+        if (bienDto.getCodigoBarras().length() > 45) {
+            logger.info("El codigo de barras no puede exceder los 45 caracteres");
+            return new ResponseEntity<>(new Message("El codigo de barras no puede exceder los 45 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        }
+
+        if (bienDto.getnSerie().length() > 100) {
+            logger.info("El numero de serie no puede exceder los 100 caracteres");
+            return new ResponseEntity<>(new Message("El numero de serie no puede exceder los 100 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        }
+
+        if (bienDto.getFecha() == null) {
+            logger.info("El fecha no puede ser nullo");
+            return new ResponseEntity<>(new Message("La fecha no puede ser nullo", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        }
 
         Bien bien = new Bien();
-        bien.setTipoBien(tipoBienRepository.findById(bienDto.getTipoBienDto().getIdTipo())
-                .orElseThrow(() -> new RuntimeException("TipoBien no encontrado")));
-        bien.setUsuario(usuarioRepository.findById(bienDto.getUsuarioDto().getIdusuario())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado")));
-        bien.setModelo(modeloRepository.findById(bienDto.getModeloDto().getIdModelo())
-                .orElseThrow(() -> new RuntimeException("Modelo no encontrado")));
-        bien.setMarca(marcaRepository.findById(bienDto.getMarcaDto().getIdmarca())
-                .orElseThrow(() -> new RuntimeException("Marca no encontrada")));
-        bien.setLugar(lugarRepository.findById(bienDto.getLugarDto().getIdlugar())
-                .orElseThrow(() -> new RuntimeException("Lugar no encontrado")));
+        bien.setIdBien(bienDto.getIdBien());
         bien.setCodigoBarras(bienDto.getCodigoBarras());
-        bien.setnSerie(bienDto.getNSerie());
+        bien.setnSerie(bienDto.getnSerie());
+        bien.setFecha(new Date());
+        bien.setTipoBien(tipoBien);
+        bien.setUsuario(usuario);
+        bien.setModelo(modelo);
+        bien.setMarca(marca);
+        bien.setLugar(lugar);
 
-        Bien bienGuardado = bienRepository.saveAndFlush(bien);
-        BienDto bienDtoGuardado = convertToDto(bienGuardado);
-        logger.info("El bien se guardo correctamente");
-        return new ResponseEntity<>(new Message(bienDtoGuardado, "El bien se guardo correctamente", TypesResponse.SUCCESS), HttpStatus.OK);
-    }
+        bien = bienRepository.saveAndFlush(bien);
 
-    //Actualizar
-    @Transactional(rollbackFor ={SQLException.class})
-    public ResponseEntity<Object> Actualizar (Long idBien, BienDto bienDto) {
-        logger.info("Ejecuntando funcion: Actualizar");
-
-        Optional<Bien> optionalBien = bienRepository.findById(idBien);
-        if (optionalBien.isEmpty()) {
-            logger.info("No se encontro el bien");
-            return new ResponseEntity<>(new Message("", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+        if (bien == null) {
+            return new ResponseEntity<>(new Message("El bien no se registro", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
-        Bien bien = optionalBien.get();
-        bien.setCodigoBarras(bienDto.getCodigoBarras());
-        bien.setnSerie(bienDto.getNSerie());
-        bien.setStatus(bienDto.isStatus());
 
-        bien.setTipoBien(tipoBienRepository.findById(bienDto.getTipoBienDto().getIdTipo())
-                .orElseThrow(() -> new RuntimeException("TipoBien no encontrado")));
-        bien.setUsuario(usuarioRepository.findById(bienDto.getUsuarioDto().getIdusuario())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado")));
-
-        Bien bienGuardado = bienRepository.saveAndFlush(bien);
-        BienDto bienDtoGuardado = convertToDto(bienGuardado);
-
-        logger.info("Bien actualizado");
-        return new ResponseEntity<>(new Message(bienDtoGuardado, "Bien actualizado correctamente", TypesResponse.SUCCESS), HttpStatus.OK);
+        logger.info("Se creo el bien");
+        return new ResponseEntity<>(new Message(bien,"Se creo el bie exitosamente", TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
-    //CambiarStatus
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<Object> cambiarStatus(Long idBien, boolean status) {
-        logger.info("Ejecuntando funcion: Cambiar estado");
+    public ResponseEntity<Object> actualizarBien (Long idBien,BienDto bienDto) {
+        logger.info("Ejecutando funcion: actualizarBien");
 
-        Optional<Bien> optionalBien = bienRepository.findById(idBien);
-        if (optionalBien.isEmpty()) {
+        Optional<Bien> bienOptional = bienRepository.findById(idBien);
+        if (bienOptional.isEmpty()) {
             logger.info("No se encontro el bien");
-            return new ResponseEntity<>(new Message("El bien no se encontro",TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new Message("No se encontro el bien", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
-        Bien bien = optionalBien.get();
-        bien.setStatus(status);
-        Bien bienGuardado = bienRepository.saveAndFlush(bien);
-        BienDto bienDto = convertToDto(bienGuardado);
+        if (bienDto.getCodigoBarras().length() > 45) {
+            logger.info("El codigo de barras no puede exceder los 45 caracteres");
+            return new ResponseEntity<>(new Message("El codigo de barras no puede exceder los 45 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        }
 
-        logger.info("Cambio de status logrado");
-        return new ResponseEntity<>(new Message (bienDto,"Se cambio el estado del bien correctamente",TypesResponse.SUCCESS),HttpStatus.OK);
+        if (bienDto.getnSerie().length() > 100) {
+            logger.info("El numero de serie no puede exceder los 100 caracteres");
+            return new ResponseEntity<>(new Message("El numero de serie no puede exceder los 100 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        }
+
+        if (bienDto.getFecha() == null) {
+            logger.info("El fecha no puede ser nullo");
+            return new ResponseEntity<>(new Message("La fecha no puede ser nullo", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        }
+
+        //Entidades relacionadas
+        if (bienDto.getIdTipoBien() != null){
+            Optional<TipoBien> tipoBienOptional = tipoBienRepository.findById(bienDto.getIdTipoBien());
+            if (tipoBienOptional.isEmpty()) {
+                logger.info("No se encontro el tipo de bien");
+                return new ResponseEntity<>(new Message("No se encontro el tipo de bien", TypesResponse.WARNING),HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        if (bienDto.getIdUsuario() != null){
+            Optional<Usuario> usuarioOptional = usuarioRepository.findById(bienDto.getIdUsuario());
+            if (usuarioOptional.isEmpty()) {
+                logger.info("No se encontro el usuario");
+                return new ResponseEntity<>(new Message("No se encontro el usuario", TypesResponse.WARNING),HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        if (bienDto.getIdModelo() != null){
+            Optional<Modelo> modeloOptional = modeloRepository.findById(bienDto.getIdModelo());
+            if (modeloOptional.isEmpty()) {
+                logger.info("No se encontro el modelo");
+                return new ResponseEntity<>(new Message("No se encontro el modelo", TypesResponse.WARNING),HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        if (bienDto.getIdMarca() != null){
+            Optional<Marca> marcaOptional = marcaRepository.findById(bienDto.getIdMarca());
+            if (marcaOptional.isEmpty()) {
+                logger.info("No se encontro el marca");
+                return new ResponseEntity<>(new Message("No se encontro el marca", TypesResponse.WARNING),HttpStatus.BAD_REQUEST);
+            }
+            bienDto.setMarca(marcaOptional.get());
+        }
+
+        if (bienDto.getIdLugar() != null){
+            Optional<Lugar> lugarOptional = lugarRepository.findById(bienDto.getIdLugar());
+            if (lugarOptional.isEmpty()) {
+                logger.info("No se encontro el lugar");
+                return new ResponseEntity<>(new Message("No se encontro el lugar", TypesResponse.WARNING),HttpStatus.BAD_REQUEST);
+            }
+
+        }
+        Bien bien = new Bien();
+        bien.setIdBien(bienDto.getIdBien());
+        bien.setCodigoBarras(bienDto.getCodigoBarras());
+        bien.setnSerie(bienDto.getnSerie());
+        bien.setFecha(new Date());
+
+        if (bienDto.getFecha() != null){
+            bien.setFecha(bienDto.getFecha());
+        } else {
+            bien.setFecha(new Date());
+        }
+
+        if (bienDto.getIdTipoBien() != null) {
+            TipoBien tipoBien = tipoBienRepository.findById(bienDto.getIdTipoBien())
+                    .orElseThrow(()-> {
+                        logger.info("No se encontro el tipo de bien");
+                        return new RuntimeException("No se encontro el tipo de bien");
+                    });
+        }
+
+        if (bienDto.getIdUsuario() != null) {
+            Usuario usuario = usuarioRepository.findById(bienDto.getIdUsuario())
+                    .orElseThrow(()-> {
+                        logger.info("No se encontro el usuario");
+                        return new RuntimeException("No se encontro el usuario");
+                    });
+        }
+
+        if (bienDto.getIdModelo() != null) {
+            Modelo modelo = modeloRepository.findById(bienDto.getIdModelo())
+                    .orElseThrow(()->{
+                        logger.info("No se encontro el modelo");
+                        return new RuntimeException("No se encontro el modelo");
+                    });
+        }
+
+        if (bienDto.getIdMarca() != null) {
+            Marca marca = marcaRepository.findById(bienDto.getIdMarca())
+                    .orElseThrow(()-> {
+                        logger.info("No se encontro el marca");
+                        return new RuntimeException("No se encontro el marca");
+                    });
+        }
+
+        if (bienDto.getIdLugar() != null) {
+            Lugar lugar = lugarRepository.findById(bienDto.getIdLugar())
+                    .orElseThrow(()->{
+                        logger.info("No se encontro el lugar");
+                        return new RuntimeException("No se encontro el lugar");
+                    });
+        }
+
+        bien = bienRepository.saveAndFlush(bien);
+
+        logger.info("Se actualizo el bien");
+        return new ResponseEntity<>(new Message(bien,"Se actualizo el bien correctamente", TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
-    //Metodo para convertir Bien en BienDto
-    private BienDto convertToDto (Bien bien) {
-        BienDto bienDto = new BienDto();
-        bienDto.setIdBien(bien.getIdBien());
-        bienDto.setCodigoBarras(bien.getCodigoBarras());
-        bienDto.setNSerie(bien.getnSerie());
+    @Transactional(rollbackFor = {SQLException.class})
+    public ResponseEntity<Object> cambiarStatus (Long idBien) {
+        logger.info("Ejecutando funcion: cambiarStatus");
 
-        bienDto.setTipoBienDto(convertToTipoBienDto(bien.getTipoBien()));
-        bienDto.setUsuarioDto(convertToUsuarioDto(bien.getUsuario()));
-        bienDto.setModeloDto(convertToModeloDto(bien.getModelo()));
-        bienDto.setMarcaDto(convertToMarcaDto(bien.getMarca()));
-        bienDto.setLugarDto(convertToLugarDto(bien.getLugar()));
-        return bienDto;
-    }
+        Optional<Bien> bienOptional = bienRepository.findById(idBien);
+        if (bienOptional.isEmpty()) {
+            logger.info("No se encontro el bien");
+            return new ResponseEntity<>(new Message("El bien no existe", TypesResponse.WARNING),HttpStatus.BAD_REQUEST);
+        }
 
-    private TipoBienDto convertToTipoBienDto(TipoBien tipoBien) {
-        TipoBienDto dto = new TipoBienDto();
-        dto.setIdTipo(tipoBien.getIdTipo());
-        dto.setNombre(tipoBien.getNombre());
-        return dto;
-    }
+        Bien bien = bienOptional.get();
+        bien.setStatus(!bien.isStatus());
+        bienRepository.saveAndFlush(bien);
 
-    private UsuarioDto convertToUsuarioDto(Usuario usuario) {
-        UsuarioDto dto = new UsuarioDto();
-        dto.setIdusuario(usuario.getIdusuario());
-        dto.setRol(usuario.getRol()); //Aqui el rol puede ser admin, becario o responsable
-        dto.setNombre(usuario.getNombre());
-        return dto;
-    }
+        if (bien == null) {
+            return new ResponseEntity<>(new Message("El bien no se cambio de status", TypesResponse.ERROR),HttpStatus.BAD_REQUEST);
+        }
 
-    private ModeloDto convertToModeloDto(Modelo modelo) {
-        ModeloDto dto = new ModeloDto();
-        dto.setIdModelo(modelo.getIdModelo());
-        dto.setNombreModelo(modelo.getNombreModelo());
-        return dto;
-    }
-
-    private MarcaDto convertToMarcaDto (Marca marca) {
-        MarcaDto dto = new MarcaDto();
-        dto.setIdmarca(marca.getIdmarca());
-        dto.setNombre(marca.getNombre());
-        return dto;
-    }
-
-    private LugarDto convertToLugarDto (Lugar lugar) {
-        LugarDto dto = new LugarDto();
-        dto.setIdlugar(lugar.getIdlugar());
-        dto.setLugar(lugar.getLugar());
-        return dto;
+        logger.info("Se actualizo el estado del bien");
+        return new ResponseEntity<>(new Message(bien, "Se actualizo el estado exitosamente", TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
 }

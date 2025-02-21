@@ -24,7 +24,7 @@ public class AreaComunController {
     }
 
     @PatchMapping("/{idArea}/status")
-    public ResponseEntity<Object> cambiarStatus(@Validated(AreaComunDto.CambiarStatus.class) @PathVariable Long idArea) {
+    public ResponseEntity<Object> cambiarStatusArea(@Validated(AreaComunDto.CambiarStatus.class) @PathVariable Long idArea) {
         return areaComunService.cambiarStatus(idArea);
     }
 

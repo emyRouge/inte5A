@@ -21,33 +21,33 @@ public class ModeloController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> obtenerTodos() {
-        return modeloService.buscarTodos();
+    public ResponseEntity<Object> buscarTodosLosModelos() {
+        return modeloService.buscarTodosLosModelos();
     }
 
     @GetMapping("/{idModelo}")
-    public ResponseEntity<Object> obtenerPorId(@PathVariable Long idModelo) {
-        return modeloService.buscarPorId(idModelo);
+    public ResponseEntity<Object> buscarModelosPorId(@PathVariable Long idModelo) {
+        return modeloService.buscarModelosPorId(idModelo);
     }
 
     @GetMapping("/nombre/{nombreModelo}")
-    public ResponseEntity<Object> obtenerPorNombre(@PathVariable String nombreModelo) {
-        return modeloService.buscarPorNombre(nombreModelo);
+    public ResponseEntity<Object> buscarModelosPorNombre(@PathVariable String nombreModelo) {
+        return modeloService.buscarModelosPorNombre(nombreModelo);
     }
 
     @PutMapping("/cambiar-status/{idModelo}")
-    public ResponseEntity<Object> cambiarStatus(@Validated (ModeloDto.CambiarStatus.class) @PathVariable Long idModelo) {
-        return modeloService.cambiarStatus(idModelo);
+    public ResponseEntity<Object> cambiarStatusModelo(@Validated (ModeloDto.CambiarStatus.class) @PathVariable Long idModelo) {
+        return modeloService.cambiarStatusModelo(idModelo);
     }
 
     @PutMapping("/{idModelo}")
-    public ResponseEntity<Object> actualizar(@PathVariable Long idModelo, @Validated(ModeloDto.ModificarModelo.class) @RequestBody ModeloDto modeloDto) {
-        return modeloService.Actualizar(idModelo, modeloDto);
+    public ResponseEntity<Object> actualizarModelo(@PathVariable Long idModelo, @Validated(ModeloDto.ModificarModelo.class) @RequestBody ModeloDto modeloDto) {
+        return modeloService.actualizarModelo(idModelo, modeloDto);
     }
 
     @PostMapping
-    public ResponseEntity<Object> crear(@RequestBody ModeloDto modeloDto) {
-        return modeloService.crear(modeloDto);
+    public ResponseEntity<Object> crearModelo(@RequestBody ModeloDto modeloDto) {
+        return modeloService.crearModelo(modeloDto);
     }
 
 }

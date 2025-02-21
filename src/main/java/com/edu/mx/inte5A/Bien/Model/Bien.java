@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Table(name = "bien")
@@ -19,6 +20,20 @@ public class Bien {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idBien;
 
+    @Column(name = "codigoBarras", nullable = false, unique = true, length = 45)
+    private String codigoBarras;
+
+    @Column(name = "nSerie", nullable = false, length = 100)
+    private String nSerie;
+
+    @Column(name = "status", nullable = false, columnDefinition = "TINYINT DEFAULT 1")
+    private boolean status;
+
+    @Column(name = "fecha", columnDefinition = "TIMESTAMP DEFAULT NOW()")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fecha;
+
+    //Relaciones con otras entidades
     @ManyToOne
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "tipoBien", nullable = false)
@@ -39,12 +54,6 @@ public class Bien {
     @JoinColumn(name = "idMarca", nullable = false)
     private Marca marca;
 
-    @Column(name = "codigoBarras", nullable = false, unique = true, length = 45)
-    private String codigoBarras;
-
-    @Column(name = "nSerie", nullable = false, length = 100)
-    private String nSerie;
-
     @ManyToOne
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "idLugar", nullable = true)
@@ -54,37 +63,34 @@ public class Bien {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<Baja> bajas;
 
-    //Faltaria agregar fecha de registro
-
-    @Column(name = "status", nullable = false, columnDefinition = "TINYINT DEFAULT 1")
-    private boolean status;
-
     public Bien() {
     }
 
-    public Bien(Long idBien, TipoBien tipoBien, Usuario usuario, Modelo modelo, Marca marca, String codigoBarras, String nSerie, Lugar lugar, List<Baja> bajas, boolean status) {
+    public Bien(Long idBien, String codigoBarras, String nSerie, boolean status, TipoBien tipoBien, Usuario usuario, Modelo modelo, Marca marca, Lugar lugar, List<Baja> bajas, Date fecha) {
         this.idBien = idBien;
+        this.codigoBarras = codigoBarras;
+        this.nSerie = nSerie;
+        this.status = status;
         this.tipoBien = tipoBien;
         this.usuario = usuario;
         this.modelo = modelo;
         this.marca = marca;
-        this.codigoBarras = codigoBarras;
-        this.nSerie = nSerie;
         this.lugar = lugar;
         this.bajas = bajas;
-        this.status = status;
+        this.fecha = fecha;
     }
 
-    public Bien(TipoBien tipoBien, Usuario usuario, Modelo modelo, Marca marca, String codigoBarras, String nSerie, Lugar lugar, List<Baja> bajas, boolean status) {
+    public Bien(String codigoBarras, String nSerie, boolean status, TipoBien tipoBien, Usuario usuario, Modelo modelo, Marca marca, Lugar lugar, List<Baja> bajas, Date fecha) {
+        this.codigoBarras = codigoBarras;
+        this.nSerie = nSerie;
+        this.status = status;
         this.tipoBien = tipoBien;
         this.usuario = usuario;
         this.modelo = modelo;
         this.marca = marca;
-        this.codigoBarras = codigoBarras;
-        this.nSerie = nSerie;
         this.lugar = lugar;
         this.bajas = bajas;
-        this.status = status;
+        this.fecha = fecha;
     }
 
     public Long getIdBien() {
@@ -165,6 +171,14 @@ public class Bien {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
     }
 
 }

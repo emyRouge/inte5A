@@ -27,18 +27,18 @@ public class LugarController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> obtenerTodos() {
-        return lugarService.buscarTodos();
+    public ResponseEntity<Object> buscarTodosLosLugares() {
+        return lugarService.buscarTodosLosLugares();
     }
 
     @GetMapping("/{idLugar}")
-    public ResponseEntity<Object> obtenerPorId(@PathVariable Long idLugar) {
-        return lugarService.buscarPorId(idLugar);
+    public ResponseEntity<Object> buscarLugaresPorId(@PathVariable Long idLugar) {
+        return lugarService.buscarLugaresPorId(idLugar);
     }
 
     @GetMapping("/nombre/{nombre}")
-    public ResponseEntity<Object> obtenerPorNombre(@PathVariable String nombre) {
-        return lugarService.buscarPorNombre(nombre);
+    public ResponseEntity<Object> buscarLugaresPorNombre(@PathVariable String nombre) {
+        return lugarService.buscarLugaresPorNombre(nombre);
     }
 
     @PostMapping
@@ -48,12 +48,12 @@ public class LugarController {
 
     @PutMapping("/{idLugar}")
     public ResponseEntity<Object> actualizarLugar(@PathVariable Long idLugar, @Validated(LugarDto.ModificarLugar.class) @RequestBody LugarDto lugarDto) {
-        return lugarService.Actualizar(idLugar, lugarDto);
+        return lugarService.actualizarLugar(idLugar, lugarDto);
     }
 
     @PatchMapping("/{idLugar}/status")
-    public ResponseEntity<Object> cambiarStatus(@Validated (LugarDto.CambiarStatus.class) @PathVariable Long idLugar) {
-        return lugarService.CambiarStatus(idLugar);
+    public ResponseEntity<Object> cambiarStatusLugar(@Validated (LugarDto.CambiarStatus.class) @PathVariable Long idLugar) {
+        return lugarService.cambiarStatusLugar(idLugar);
     }
 
 }

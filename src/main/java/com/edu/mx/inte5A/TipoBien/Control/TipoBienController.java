@@ -7,8 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/tipo-bien")
 public class TipoBienController {
@@ -21,35 +19,35 @@ public class TipoBienController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> obtenerTodos() {
-        return tipoBienService.buscarTodos();
+    public ResponseEntity<Object> buscarTodosTiposBines() {
+        return tipoBienService.buscarTodosTiposBines();
     }
 
     @GetMapping("/{idTipo}")
-    public ResponseEntity<Object> obtenerPorId(@PathVariable Long idTipo) {
-        return tipoBienService.buscarPorId(idTipo);
+    public ResponseEntity<Object> buscarTipoBienPorId(@PathVariable Long idTipo) {
+        return tipoBienService.buscarTipoBienPorId(idTipo);
     }
 
     @GetMapping("/nombre/{nombre}")
-    public ResponseEntity<Object> obtenerPorNombre(@PathVariable String nombre) {
-        return tipoBienService.buscarPorNombre(nombre);
+    public ResponseEntity<Object> buscarTipoBienPorNombre(@PathVariable String nombre) {
+        return tipoBienService.buscarTipoBienPorNombre(nombre);
     }
 
     @PutMapping("/cambiar-status/{idTipo}")
-    public ResponseEntity<Object> cambiarStatus(@PathVariable Long idTipo) {
-        return tipoBienService.CambiarStatus(idTipo);
+    public ResponseEntity<Object> cambiarStatusTipoBien(@PathVariable Long idTipo) {
+        return tipoBienService.cambiarStatusTipoBien(idTipo);
     }
 
     @PutMapping("/{idTipo}")
-    public ResponseEntity<Object> actualizar(@PathVariable Long idTipo,
+    public ResponseEntity<Object> actualizarTipoBien(@PathVariable Long idTipo,
                                              @Validated (TipoBienDto.ModificarTipoBien.class)
                                              @RequestBody TipoBienDto tipoBienDto) {
-        return tipoBienService.Actualizar(idTipo, tipoBienDto);
+        return tipoBienService.actualizarTipoBien(idTipo, tipoBienDto);
     }
 
     @PostMapping
-    public ResponseEntity<Object> crear(@Validated (TipoBienDto.RegistrarTipoBien.class) @RequestBody TipoBienDto tipoBienDto) {
-        return tipoBienService.crearTipo(tipoBienDto);
+    public ResponseEntity<Object> crearTipoBien(@Validated (TipoBienDto.RegistrarTipoBien.class) @RequestBody TipoBienDto tipoBienDto) {
+        return tipoBienService.crearTipoBien(tipoBienDto);
     }
 
 }

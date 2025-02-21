@@ -33,8 +33,8 @@ public class ModeloService {
 
     //Buscar por id
     @Transactional(readOnly = true)
-    public ResponseEntity<Object> buscarTodos() {
-        logger.info("Ejecutando funcion: buscarTodos");
+    public ResponseEntity<Object> buscarTodosLosModelos() {
+        logger.info("Ejecutando funcion: buscar todos los modelos");
 
         List<ModeloDto> modelos = modeloRepository.findAll()
                 .stream()
@@ -51,8 +51,8 @@ public class ModeloService {
 
     //Buscar por id
     @Transactional(readOnly = true)
-    public ResponseEntity<Object> buscarPorId(Long idModelo){
-        logger.info("Ejecutando funcion: buscarPorId");
+    public ResponseEntity<Object> buscarModelosPorId(Long idModelo){
+        logger.info("Ejecutando funcion: buscar modelos por Id");
         Optional<Modelo> modeloOptional = modeloRepository.findById(idModelo);
 
         if(modeloOptional.isEmpty()){
@@ -68,8 +68,8 @@ public class ModeloService {
 
     //Buscar por nombre
     @Transactional(readOnly = true)
-    public ResponseEntity <Object> buscarPorNombre(String nombreModelo) {
-        logger.info("Ejecutando funcion: buscarPorNombre");
+    public ResponseEntity <Object> buscarModelosPorNombre(String nombreModelo) {
+        logger.info("Ejecutando funcion: buscar modelos por nombre");
 
         Optional<Modelo> modeloOptional = modeloRepository.findByNombreModelo(nombreModelo);
         if(modeloOptional.isEmpty()){
@@ -87,8 +87,8 @@ public class ModeloService {
 
     //Cambiar status
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<Object> cambiarStatus (Long idMarca){
-        logger.info("Ejecutando funcion: cambiarStatus");
+    public ResponseEntity<Object> cambiarStatusModelo (Long idMarca){
+        logger.info("Ejecutando funcion: cambiar status modelo");
 
         Optional<Modelo> modeloOptional = modeloRepository.findById(idMarca);
         if(modeloOptional.isEmpty()){
@@ -108,8 +108,8 @@ public class ModeloService {
 
     //actualizar
     @Transactional(rollbackFor ={SQLException.class})
-    public ResponseEntity <Object> Actualizar(Long idModelo, ModeloDto modeloDto) {
-        logger.info("Ejucatando funcion: Actualizar");
+    public ResponseEntity <Object> actualizarModelo(Long idModelo, ModeloDto modeloDto) {
+        logger.info("Ejucatando funcion: actualizar modelo");
         Optional<Modelo> modeloOptional = modeloRepository.findById(idModelo);
 
         if(modeloOptional.isEmpty()){
@@ -130,8 +130,8 @@ public class ModeloService {
 
     //crear
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<Object> crear (ModeloDto modeloDto) {
-        logger.info("Ejecutando funcion: crear");
+    public ResponseEntity<Object> crearModelo (ModeloDto modeloDto) {
+        logger.info("Ejecutando funcion: crear modelo");
 
         byte[] fotoBytes = null;
         if(modeloDto.getFoto() != null){

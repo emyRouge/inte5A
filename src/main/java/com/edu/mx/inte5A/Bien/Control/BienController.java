@@ -17,17 +17,10 @@ public class BienController {
         this.bienService = bienService;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{idBien}")
     public ResponseEntity<Object> obtenerPorId(@PathVariable Long idBien) {
-        return bienService.obtenerId(idBien);
-
+        return bienService.buscarPorId(idBien);
     }
-
-    //Este esta mal luego lo corrijo
-    /*@GetMapping("/responsable/{idResponsable}")
-    public ResponseEntity<Object> obtenerUsuario(@PathVariable Long idUsuario) {
-        return bienService.obtenerId(idUsuario);
-    }*/
 
     @GetMapping
     public ResponseEntity<Object> obtenerTodosLosBienes() {
@@ -35,18 +28,18 @@ public class BienController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> create(@Validated(BienDto.RegistrarBien.class) @RequestBody BienDto bienDTO) {
-        return bienService.crear(bienDTO);
+    public ResponseEntity<Object> crearBienCompleto(@Validated(BienDto.RegistrarBien.class) @RequestBody BienDto bienDTO) {
+        return bienService.crearBien(bienDTO);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Object> update(@PathVariable Long idBien, @Validated (BienDto.ModificarBien.class) @RequestBody BienDto bienDTO) {
-        return bienService.Actualizar(idBien, bienDTO);
+    @PutMapping("/{idBien}")
+    public ResponseEntity<Object> actualizarBien(@PathVariable Long idBien, @Validated(BienDto.ModificarBien.class) @RequestBody BienDto bienDTO) {
+        return bienService.actualizarBien(idBien, bienDTO);
     }
 
-    @PatchMapping("/{id}/status")
-    public ResponseEntity<Object> cambiarStatus (@PathVariable Long idBien, @Validated (BienDto.CambiarStatus.class) @RequestParam boolean status) {
-        return bienService.cambiarStatus(idBien, status);
+    @PatchMapping("/{idBien}/status")
+    public ResponseEntity<Object> cambiarStatus ( @Validated (BienDto.CambiarStatus.class) @PathVariable Long idBien) {
+        return bienService.cambiarStatus(idBien);
     }
 
 }

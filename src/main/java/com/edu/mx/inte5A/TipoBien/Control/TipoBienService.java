@@ -32,8 +32,8 @@ public class TipoBienService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<Object> buscarTodos() {
-        logger.info("Ejecutando funcion: buscarTodos");
+    public ResponseEntity<Object> buscarTodosTiposBines() {
+        logger.info("Ejecutando funcion: buscar todos los tipos de bienes");
 
         List<TipoBienDto> tipoBienDtos = tipoBienRepository.findAll()
                 .stream()
@@ -43,8 +43,8 @@ public class TipoBienService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<Object> buscarPorId(Long idTipo) {
-        logger.info("Ejecutando funcion: buscarPorId");
+    public ResponseEntity<Object> buscarTipoBienPorId(Long idTipo) {
+        logger.info("Ejecutando funcion: buscar tipo de bien por Id");
 
         Optional<TipoBien> tipoBienOptional = tipoBienRepository.findById(idTipo);
         if (tipoBienOptional.isEmpty()) {
@@ -58,8 +58,8 @@ public class TipoBienService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity <Object> buscarPorNombre(String nombre) {
-        logger.info("Ejecutando funcion: buscarPorNombre");
+    public ResponseEntity <Object> buscarTipoBienPorNombre(String nombre) {
+        logger.info("Ejecutando funcion: buscar tipo de bien por nombre");
 
         Optional<TipoBien> tipoBienOptional = tipoBienRepository.findByNombre(nombre);
         if (tipoBienOptional.isEmpty()) {
@@ -75,8 +75,8 @@ public class TipoBienService {
     }
 
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity <Object> CambiarStatus(Long idTipo) {
-        logger.info("Ejecutando funcion: CambiarStatus");
+    public ResponseEntity <Object> cambiarStatusTipoBien(Long idTipo) {
+        logger.info("Ejecutando funcion: cambiarStatus de tipo de bien");
         Optional<TipoBien> tipoBienOptional = tipoBienRepository.findById(idTipo);
 
         if (tipoBienOptional.isEmpty()) {
@@ -94,9 +94,9 @@ public class TipoBienService {
     }
 
     @Transactional(rollbackFor ={SQLException.class})
-    public ResponseEntity <Object> Actualizar(Long idTipo, TipoBienDto tipoBienDto) {
+    public ResponseEntity <Object> actualizarTipoBien(Long idTipo, TipoBienDto tipoBienDto) {
 
-        logger.info("Ejecutando funcion: Actualizar");
+        logger.info("Ejecutando funcion: actualizar tipo de bien");
         Optional<TipoBien> tipoBienOptional = tipoBienRepository.findById(idTipo);
         if (!tipoBienOptional.isPresent()) {
             logger.info("No se encontro el tipo de bien");
@@ -113,8 +113,8 @@ public class TipoBienService {
     }
 
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<Object> crearTipo (TipoBienDto tipoBienDto) {
-        logger.info("Ejecutando funcion: crearTipo");
+    public ResponseEntity<Object> crearTipoBien (TipoBienDto tipoBienDto) {
+        logger.info("Ejecutando funcion: crear tipo de bien");
 
         if (tipoBienDto.getNombre().length() > 100) {
             logger.info("El nombre del tipo de bien no puede exceder mas de 100 caracteres");

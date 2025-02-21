@@ -33,7 +33,7 @@ public class LugarService {
     //Crear Lugar
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<Object> crearLugar (LugarDto lugarDto) {
-        logger.info("Ejecutando funcion: crearLugar");
+        logger.info("Ejecutando funcion: crear lugar");
 
         if (lugarDto.getLugar().length() > 50) {
             logger.info("El nombre del lugar no puede exceder mas de los 50 caracteres");
@@ -54,8 +54,8 @@ public class LugarService {
 
     //Buscar todos
     @Transactional(readOnly = true)
-    public ResponseEntity<Object> buscarTodos() {
-        logger.info("Ejecutando funcion: BuscarTodos");
+    public ResponseEntity<Object> buscarTodosLosLugares() {
+        logger.info("Ejecutando funcion: buscar todos los lugares");
 
         List<LugarDto> lugares = lugarRepository.findAll()
                 .stream()
@@ -80,8 +80,8 @@ public class LugarService {
 
     //Buscar por ID
     @Transactional(readOnly = true)
-    public ResponseEntity <Object> buscarPorId(Long idLugar) {
-        logger.info("Ejecutando funcion: BuscarPorId");
+    public ResponseEntity <Object> buscarLugaresPorId(Long idLugar) {
+        logger.info("Ejecutando funcion: buscar lugares por ID");
 
         Optional<Lugar> lugarOptional = lugarRepository.findById(idLugar);
         if (lugarOptional.isEmpty()) {
@@ -97,8 +97,8 @@ public class LugarService {
 
     //Buscar por nombre
     @Transactional(readOnly = true)
-    public ResponseEntity <Object> buscarPorNombre(String nombre) {
-        logger.info("Ejecutando funcion: BuscarPorNombre");
+    public ResponseEntity <Object> buscarLugaresPorNombre(String nombre) {
+        logger.info("Ejecutando funcion: buscar lugares por nombre");
 
         Optional<Lugar> optionalLugar = lugarRepository.findByLugar(nombre);
         if (optionalLugar.isEmpty()) {
@@ -115,8 +115,8 @@ public class LugarService {
 
     //Cambiar status
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity <Object> CambiarStatus(Long idLugar) {
-        logger.info("Ejecutando funcion: CambiarStatus");
+    public ResponseEntity <Object> cambiarStatusLugar(Long idLugar) {
+        logger.info("Ejecutando funcion: cambiar status lugar");
         Optional<Lugar> optionalLugar = lugarRepository.findById(idLugar);
         if (optionalLugar.isEmpty()) {
             logger.warn("No se encuentra el lugar");
@@ -134,8 +134,8 @@ public class LugarService {
 
     //Actualizar
     @Transactional(rollbackFor ={SQLException.class})
-    public ResponseEntity <Object> Actualizar(Long idLugar, LugarDto lugarDto) {
-        logger.info("Ejecutando funcion: Actualizar");
+    public ResponseEntity <Object> actualizarLugar(Long idLugar, LugarDto lugarDto) {
+        logger.info("Ejecutando funcion: actualizar lugar");
 
         Optional<Lugar> lugarOptional = lugarRepository.findById(idLugar);
         if (!lugarOptional.isPresent()) {

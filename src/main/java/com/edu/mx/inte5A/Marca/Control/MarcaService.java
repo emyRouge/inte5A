@@ -32,8 +32,8 @@ public class MarcaService {
 
     //Crear
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<Object> crear (MarcaDto marcaDto) {
-        logger.info("Ejecutando funcion: Creando Marca");
+    public ResponseEntity<Object> crearMarca (MarcaDto marcaDto) {
+        logger.info("Ejecutando funcion: crear Marca");
 
         if (marcaDto.getNombre().length() > 100) {
             logger.info("El nombre de la marca no puede exceder mas de los 100 caracteres");
@@ -53,8 +53,8 @@ public class MarcaService {
 
     //Buscar todos
     @Transactional(readOnly = true)
-    public ResponseEntity<Object> buscarTodos(){
-        logger.info("Ejecutando funcion: buscarTodos");
+    public ResponseEntity<Object> buscarTodasLasMarcas(){
+        logger.info("Ejecutando funcion: buscar todas las marcas");
 
         List<MarcaDto> marcas = marcaRepository.findAll()
                 .stream()
@@ -65,8 +65,8 @@ public class MarcaService {
 
     //Buscar todos por id
     @Transactional(readOnly = true)
-    public ResponseEntity<Object> buscarPorId(Long idMarca){
-        logger.info("Ejecutando funcion: buscarPorId");
+    public ResponseEntity<Object> buscarMarcasPorId(Long idMarca){
+        logger.info("Ejecutando funcion: buscar marcas por Id");
         Optional<Marca> marcaOptional = marcaRepository.findById(idMarca);
 
         if (marcaOptional.isEmpty()) {
@@ -83,8 +83,8 @@ public class MarcaService {
 
     //Buscar todos por nombre
     @Transactional(readOnly = true)
-    public ResponseEntity <Object> buscarPorNombre(String nombre) {
-        logger.info("Ejecutando funcion: buscarPorNombre");
+    public ResponseEntity <Object> buscarMarcasPorNombre(String nombre) {
+        logger.info("Ejecutando funcion: buscar marcas por nombre");
 
         Optional<Marca> marcaOptional = marcaRepository.findByNombre(nombre);
         if (marcaOptional.isEmpty()) {
@@ -101,8 +101,8 @@ public class MarcaService {
     }
     //Cambiar status
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<Object> cambiarStatus (Long idMarca){
-        logger.info("Ejecutando funcion: cambiarStatus");
+    public ResponseEntity<Object> cambiarStatusMarcas (Long idMarca){
+        logger.info("Ejecutando funcion: cambiar status marcas");
 
         Optional<Marca> marcaOptional = marcaRepository.findById(idMarca);
         if (marcaOptional.isEmpty()) {
@@ -122,8 +122,8 @@ public class MarcaService {
 
     //Actualizar
     @Transactional(rollbackFor ={SQLException.class})
-    public ResponseEntity <Object> Actualizar(Long idMarca, MarcaDto marcaDto) {
-        logger.info("Ejecutando funcion: Actualizar");
+    public ResponseEntity <Object> actualizarMarcas(Long idMarca, MarcaDto marcaDto) {
+        logger.info("Ejecutando funcion: actualizar marcas");
         Optional<Marca> marcaOptional = marcaRepository.findById(idMarca);
 
         if (!marcaOptional.isPresent()) {

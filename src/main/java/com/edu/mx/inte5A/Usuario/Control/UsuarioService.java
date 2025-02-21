@@ -34,8 +34,8 @@ public class UsuarioService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<Object> buscarPorId(Long idUsuario) {
-        logger.info("Ejecutando la funcion: buscarPorId");
+    public ResponseEntity<Object> buscarUsuarioPorId(Long idUsuario) {
+        logger.info("Ejecutando la funcion: buscar usuario por Id");
 
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);
         if (usuarioOptional.isEmpty()) {
@@ -49,8 +49,8 @@ public class UsuarioService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<Object> buscarTodos() {
-        logger.info("Ejecuntando funcion: buscarTodos");
+    public ResponseEntity<Object> buscarTodosLosUsuarios() {
+        logger.info("Ejecuntando funcion: buscarTodos los usuarios");
         List<Usuario> usuarios = usuarioRepository.findAll();
 
         if (usuarios.isEmpty()) {
@@ -65,7 +65,7 @@ public class UsuarioService {
 
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<Object> crearUsuario(UsuarioDto usuarioDto) {
-        logger.info("Ejecutando la funcion: crearUsuario");
+        logger.info("Ejecutando la funcion: crear Usuario");
 
         if (usuarioDto.getIdLugar() == null) {
             logger.error("El ID del lugar no puede ser nulo");
@@ -112,13 +112,13 @@ public class UsuarioService {
             return new ResponseEntity<>(new Message("El usuario no se registro", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
         }
 
-        logger.info("Se creó el usuario");
+        logger.info("Usuario guardado exitosamente");
         return new ResponseEntity<>(new Message(usuario, "Usuario guardado exitosamente", TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<Object> actualizar(Long idUsuario, UsuarioDto usuarioDto) {
-        logger.info("Ejecutando funcion: actualizar");
+    public ResponseEntity<Object> actualizarUsuario(Long idUsuario, UsuarioDto usuarioDto) {
+        logger.info("Ejecutando funcion: actualizar Usuario");
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);
 
         if (usuarioOptional.isEmpty()) {
@@ -177,7 +177,7 @@ public class UsuarioService {
     }
 
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<Object> cambiarStatus(Long idUsuario) {
+    public ResponseEntity<Object> cambiarStatusUsuario(Long idUsuario) {
         logger.info("Ejecutando funcion: Cambiar status del usuario");
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);
 

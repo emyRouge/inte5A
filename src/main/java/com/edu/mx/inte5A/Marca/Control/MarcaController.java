@@ -21,33 +21,33 @@ public class MarcaController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> obtenerTodos() {
-        return marcaService.buscarTodos();
+    public ResponseEntity<Object> buscarTodasLasMarcas() {
+        return marcaService.buscarTodasLasMarcas();
     }
 
     @GetMapping("/{idMarca}")
-    public ResponseEntity<Object> obtenerPorId(@PathVariable Long idMarca) {
-        return marcaService.buscarPorId(idMarca);
+    public ResponseEntity<Object> buscarMarcasPorId(@PathVariable Long idMarca) {
+        return marcaService.buscarMarcasPorId(idMarca);
     }
 
     @GetMapping("/nombre/{nombre}")
-    public ResponseEntity<Object> obtenerPorNombre(@PathVariable String nombre) {
-        return marcaService.buscarPorNombre(nombre);
+    public ResponseEntity<Object> buscarMarcasPorNombre(@PathVariable String nombre) {
+        return marcaService.buscarMarcasPorNombre(nombre);
     }
 
     @PutMapping("/cambiar-status/{idMarca}")
-    public ResponseEntity<Object> cambiarStatus(@Validated(MarcaDto.CambiarStatus.class) @PathVariable Long idMarca) {
-        return marcaService.cambiarStatus(idMarca);
+    public ResponseEntity<Object> cambiarStatusMarcas(@Validated(MarcaDto.CambiarStatus.class) @PathVariable Long idMarca) {
+        return marcaService.cambiarStatusMarcas(idMarca);
     }
 
     @PutMapping("/{idMarca}")
-    public ResponseEntity<Object> actualizar(@PathVariable Long idMarca, @Validated(MarcaDto.ModificarMarca.class) @RequestBody MarcaDto marcaDto) {
-        return marcaService.Actualizar(idMarca, marcaDto);
+    public ResponseEntity<Object> actualizarMarcas(@PathVariable Long idMarca, @Validated(MarcaDto.ModificarMarca.class) @RequestBody MarcaDto marcaDto) {
+        return marcaService.actualizarMarcas(idMarca, marcaDto);
     }
 
     @PostMapping
-    public ResponseEntity<Object> crear(@Validated(MarcaDto.RegistrarMarca.class) @RequestBody MarcaDto marcaDto) {
-        return marcaService.crear(marcaDto);
+    public ResponseEntity<Object> crearMarca(@Validated(MarcaDto.RegistrarMarca.class) @RequestBody MarcaDto marcaDto) {
+        return marcaService.crearMarca(marcaDto);
     }
 
 }
