@@ -145,7 +145,7 @@ public class ModeloService {
         modeloRepository.saveAndFlush(modelo);
 
         logger.info("Modelo creado correctamente");
-        return new ResponseEntity<>(new Message("Modelo creado correctamente",TypesResponse.SUCCESS),HttpStatus.OK);
+        return new ResponseEntity<>(new Message(modelo,"Modelo creado correctamente",TypesResponse.SUCCESS),HttpStatus.OK);
     }
 
 

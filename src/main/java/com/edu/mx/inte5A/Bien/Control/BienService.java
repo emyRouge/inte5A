@@ -180,126 +180,41 @@ public class BienService {
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<Object> actualizarBien (Long idBien,BienDto bienDto) {
         logger.info("Ejecutando funcion: actualizarBien");
-
         Optional<Bien> bienOptional = bienRepository.findById(idBien);
-        if (bienOptional.isEmpty()) {
-            logger.info("No se encontro el bien");
+
+        if (bienOptional.isPresent()) {
+            Bien bien = bienOptional.get();
+            bien.setCodigoBarras(bienDto.getCodigoBarras());
+            bien.setnSerie(bienDto.getnSerie());
+            bien.setFecha(new Date() != null ? bienDto.getFecha() : new Date());
+
+            if (bienDto.getIdTipoBien() != null) {
+                bien.setTipoBien(tipoBienRepository.findById(bienDto.getIdTipoBien()).orElse(null));
+            }
+
+            if (bienDto.getIdUsuario() != null) {
+                bien.setUsuario(usuarioRepository.findById(bienDto.getIdUsuario()).orElse(null));
+            }
+
+            if (bienDto.getIdModelo() != null) {
+                bien.setModelo(modeloRepository.findById(bienDto.getIdModelo()).orElse(null));
+            }
+
+            if (bienDto.getIdMarca() != null) {
+                bien.setMarca(marcaRepository.findById(bienDto.getIdMarca()).orElse(null));
+            }
+
+            if (bienDto.getIdLugar() != null) {
+                bien.setLugar(lugarRepository.findById(bienDto.getIdLugar()).orElse(null));
+            }
+
+            bien  = bienRepository.saveAndFlush(bien);
+            return new ResponseEntity<>(new Message(bien, "Se Actualizo el bien correctamente", TypesResponse.SUCCESS), HttpStatus.OK);
+
+        } else {
             return new ResponseEntity<>(new Message("No se encontro el bien", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
-        if (bienDto.getCodigoBarras().length() > 45) {
-            logger.info("El codigo de barras no puede exceder los 45 caracteres");
-            return new ResponseEntity<>(new Message("El codigo de barras no puede exceder los 45 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
-        }
-
-        if (bienDto.getnSerie().length() > 100) {
-            logger.info("El numero de serie no puede exceder los 100 caracteres");
-            return new ResponseEntity<>(new Message("El numero de serie no puede exceder los 100 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
-        }
-
-        if (bienDto.getFecha() == null) {
-            logger.info("El fecha no puede ser nullo");
-            return new ResponseEntity<>(new Message("La fecha no puede ser nullo", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
-        }
-
-        //Entidades relacionadas
-        if (bienDto.getIdTipoBien() != null){
-            Optional<TipoBien> tipoBienOptional = tipoBienRepository.findById(bienDto.getIdTipoBien());
-            if (tipoBienOptional.isEmpty()) {
-                logger.info("No se encontro el tipo de bien");
-                return new ResponseEntity<>(new Message("No se encontro el tipo de bien", TypesResponse.WARNING),HttpStatus.BAD_REQUEST);
-            }
-        }
-
-        if (bienDto.getIdUsuario() != null){
-            Optional<Usuario> usuarioOptional = usuarioRepository.findById(bienDto.getIdUsuario());
-            if (usuarioOptional.isEmpty()) {
-                logger.info("No se encontro el usuario");
-                return new ResponseEntity<>(new Message("No se encontro el usuario", TypesResponse.WARNING),HttpStatus.BAD_REQUEST);
-            }
-        }
-
-        if (bienDto.getIdModelo() != null){
-            Optional<Modelo> modeloOptional = modeloRepository.findById(bienDto.getIdModelo());
-            if (modeloOptional.isEmpty()) {
-                logger.info("No se encontro el modelo");
-                return new ResponseEntity<>(new Message("No se encontro el modelo", TypesResponse.WARNING),HttpStatus.BAD_REQUEST);
-            }
-        }
-
-        if (bienDto.getIdMarca() != null){
-            Optional<Marca> marcaOptional = marcaRepository.findById(bienDto.getIdMarca());
-            if (marcaOptional.isEmpty()) {
-                logger.info("No se encontro el marca");
-                return new ResponseEntity<>(new Message("No se encontro el marca", TypesResponse.WARNING),HttpStatus.BAD_REQUEST);
-            }
-            bienDto.setMarca(marcaOptional.get());
-        }
-
-        if (bienDto.getIdLugar() != null){
-            Optional<Lugar> lugarOptional = lugarRepository.findById(bienDto.getIdLugar());
-            if (lugarOptional.isEmpty()) {
-                logger.info("No se encontro el lugar");
-                return new ResponseEntity<>(new Message("No se encontro el lugar", TypesResponse.WARNING),HttpStatus.BAD_REQUEST);
-            }
-
-        }
-        Bien bien = new Bien();
-        bien.setIdBien(bienDto.getIdBien());
-        bien.setCodigoBarras(bienDto.getCodigoBarras());
-        bien.setnSerie(bienDto.getnSerie());
-        bien.setFecha(new Date());
-
-        if (bienDto.getFecha() != null){
-            bien.setFecha(bienDto.getFecha());
-        } else {
-            bien.setFecha(new Date());
-        }
-
-        if (bienDto.getIdTipoBien() != null) {
-            TipoBien tipoBien = tipoBienRepository.findById(bienDto.getIdTipoBien())
-                    .orElseThrow(()-> {
-                        logger.info("No se encontro el tipo de bien");
-                        return new RuntimeException("No se encontro el tipo de bien");
-                    });
-        }
-
-        if (bienDto.getIdUsuario() != null) {
-            Usuario usuario = usuarioRepository.findById(bienDto.getIdUsuario())
-                    .orElseThrow(()-> {
-                        logger.info("No se encontro el usuario");
-                        return new RuntimeException("No se encontro el usuario");
-                    });
-        }
-
-        if (bienDto.getIdModelo() != null) {
-            Modelo modelo = modeloRepository.findById(bienDto.getIdModelo())
-                    .orElseThrow(()->{
-                        logger.info("No se encontro el modelo");
-                        return new RuntimeException("No se encontro el modelo");
-                    });
-        }
-
-        if (bienDto.getIdMarca() != null) {
-            Marca marca = marcaRepository.findById(bienDto.getIdMarca())
-                    .orElseThrow(()-> {
-                        logger.info("No se encontro el marca");
-                        return new RuntimeException("No se encontro el marca");
-                    });
-        }
-
-        if (bienDto.getIdLugar() != null) {
-            Lugar lugar = lugarRepository.findById(bienDto.getIdLugar())
-                    .orElseThrow(()->{
-                        logger.info("No se encontro el lugar");
-                        return new RuntimeException("No se encontro el lugar");
-                    });
-        }
-
-        bien = bienRepository.saveAndFlush(bien);
-
-        logger.info("Se actualizo el bien");
-        return new ResponseEntity<>(new Message(bien,"Se actualizo el bien correctamente", TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
     @Transactional(rollbackFor = {SQLException.class})
