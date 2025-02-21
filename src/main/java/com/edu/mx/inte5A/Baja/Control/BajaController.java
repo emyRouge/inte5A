@@ -23,19 +23,24 @@ public class BajaController {
         return bajaService.crearBaja(bajaDto);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{idBaja}")
     public ResponseEntity<Object> modificarBaja(@PathVariable Long idBaja, @Validated (BajaDto.ModificarBaja.class) @RequestBody BajaDto bajaDto) {
         return bajaService.modificarBaja(idBaja, bajaDto);
     }
 
     @GetMapping
     public ResponseEntity<Object> buscarTodas() {
-        return bajaService.buscarTodas();
+        return bajaService.buscarTodasLasBajas();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{idBaja}")
     public ResponseEntity<Object> buscarPorId(@PathVariable Long idBaja) {
         return bajaService.buscarPorId(idBaja);
+    }
+
+    @GetMapping("/{idBaja}/responsable")
+    public ResponseEntity<Object> buscarPorUsuario(@PathVariable Long idBaja) {
+        return bajaService.buscarPorResponsable(idBaja);
     }
 
 }

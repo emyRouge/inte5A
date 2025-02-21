@@ -7,6 +7,8 @@ import com.edu.mx.inte5A.Baja.Model.BajaRepository;
 import com.edu.mx.inte5A.Bien.Model.Bien;
 
 import com.edu.mx.inte5A.Bien.Model.BienRepository;
+import com.edu.mx.inte5A.Usuario.Model.Usuario;
+import com.edu.mx.inte5A.Usuario.Model.UsuarioRepository;
 import com.edu.mx.inte5A.utils.Message;
 import com.edu.mx.inte5A.utils.TypesResponse;
 import org.slf4j.Logger;
@@ -29,17 +31,19 @@ public class BajaService {
 
     private final BajaRepository bajaRepository;
     private final BienRepository bienRepository;
+    private final UsuarioRepository usuarioRepository;
 
     @Autowired
-    public BajaService(BajaRepository bajaRepository, BienRepository bienRepository) {
+    public BajaService(BajaRepository bajaRepository, BienRepository bienRepository, UsuarioRepository usuarioRepository) {
         this.bajaRepository = bajaRepository;
         this.bienRepository = bienRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
-    //Guardar area
+    //Guardar baja
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<Object> crearBaja(BajaDto bajaDto) {
-        logger.info("Ejecutando funcion: guardarArea");
+        logger.info("Ejecutando funcion: crear baja");
 
         bajaDto.setMotivo(bajaDto.getMotivo());
         if (bajaDto.getMotivo().length() > 255) {
@@ -52,10 +56,19 @@ public class BajaService {
             logger.info("No se encuentra el bien");
             return new ResponseEntity<>(new Message("El bien no existe", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
         }
+
+        //Se agrega tambien un responsable que vendria siendo un usuario
+        Optional<Usuario>usuarioOptional = usuarioRepository.findById(bajaDto.getIdUsuario());
+        if (usuarioOptional.isEmpty()) {
+            logger.info("No se encuentra el usuario");
+            return new ResponseEntity<>(new Message("El usuario no existe", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+        }
+
         Baja nuevaBaja = new Baja();
         nuevaBaja.setMotivo(bajaDto.getMotivo());
         nuevaBaja.setFecha(new Date());
         nuevaBaja.setBien(bienOptional.get());
+        nuevaBaja.setUsuario(usuarioOptional.get());
 
         nuevaBaja = bajaRepository.saveAndFlush(nuevaBaja);
         if (nuevaBaja == null) {
@@ -97,18 +110,19 @@ public class BajaService {
         }
 
         logger.info("La baja se modifico correctamente");
-        return new ResponseEntity<>(new Message("La baja se modifico correctamente", TypesResponse.SUCCESS), HttpStatus.OK);
+        return new ResponseEntity<>(new Message(bajaExistente,"La baja se modifico correctamente", TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
     //Buscar todas las bajas
     @Transactional(readOnly = true)
-    public ResponseEntity<Object> buscarTodas() {
+    public ResponseEntity<Object> buscarTodasLasBajas() {
         logger.info("Ejecutando funcion: buscarTodas");
-        return new ResponseEntity<>(new Message(bajaRepository.findAll(), "Listado de bajas",TypesResponse.SUCCESS), HttpStatus.OK);
+        List<Baja> bajaList = bajaRepository.findAll();
+
+        return new ResponseEntity<>(new Message(bajaList, "Listado de bajas",TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
     //Buscar bajas por id
-
     public ResponseEntity<Object> buscarPorId(Long idBaja) {
         logger.info("Ejecutando funcion: buscarPorId");
         Optional<Baja> bajaOptional = bajaRepository.findById(idBaja);
@@ -118,22 +132,31 @@ public class BajaService {
         }
         Baja baja = bajaOptional.get();
         logger.info("Baja encontrada correctamente");
-        return new ResponseEntity<>(new Message(bajaOptional, "Baja encontrada: "+ idBaja, TypesResponse.SUCCESS), HttpStatus.OK);
+        return new ResponseEntity<>(new Message(baja, "Baja encontrada: "+ idBaja, TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<Object> buscarPorResponsable(String responsable) {
+    public ResponseEntity<Object> buscarPorResponsable(Long idBaja) {
+        logger.info("Ejecutando funcion: buscar por responsable");
 
-        logger.info("Ejecutando funcion: buscarPorResponsable");
-        List<Baja> bajas = bajaRepository.findByResponsable(responsable);
-
-        if (bajas.isEmpty()) {
-            logger.warn("No se encuentra ninguna baja para el responsable");
-            return new ResponseEntity<>(new Message("No se encontraron bajas para el responsable", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+        Optional<Baja> bajaOptional = bajaRepository.findById(idBaja);
+        if (bajaOptional.isEmpty()) {
+            logger.warn("No se encuentra el baja");
+            return new ResponseEntity<>(new Message("La baja no existe", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
         }
 
+        Baja baja = bajaOptional.get();
+        Usuario usuario = baja.getUsuario();
+
+        if (usuario == null) {
+            logger.warn("No se encontro el usuario asociado ala baja");
+            return new ResponseEntity<>(new Message("No se encontro el usuario asociado ala baja", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+        }
+
+        BajaDto bajaDto = new BajaDto(baja.getIdBaja(), baja.getMotivo(), baja.getFecha(), baja.getBien().getIdBien(), usuario.getIdusuario());
+
         logger.info("Bajas encontradas correctamente");
-        return new ResponseEntity<>(new Message(bajas, "Bajas encontradas para el responsable: " + responsable, TypesResponse.SUCCESS), HttpStatus.OK);
+        return new ResponseEntity<>(new Message(bajaDto, "Bajas encontradas para el responsable: ", TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
 }

@@ -1,7 +1,6 @@
 package com.edu.mx.inte5A.Lugar.Model;
 
 import com.edu.mx.inte5A.Bien.Model.Bien;
-import com.edu.mx.inte5A.Modelo.Model.Modelo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

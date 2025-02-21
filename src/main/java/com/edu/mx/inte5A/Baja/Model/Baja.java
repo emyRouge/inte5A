@@ -1,8 +1,8 @@
 package com.edu.mx.inte5A.Baja.Model;
 
 import com.edu.mx.inte5A.Bien.Model.Bien;
+import com.edu.mx.inte5A.Usuario.Model.Usuario;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -18,39 +18,43 @@ public class Baja {
     @Column(name = "motivo", columnDefinition = "VARCHAR(255)")
     private String motivo;
 
-    @Column(name = "fecha", columnDefinition = "DATE")
+    @Column(name = "fecha", columnDefinition = "TIMESTAMP DEFAULT NOW()")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
 
-    @Column(name = "responsable", columnDefinition = "VARCHAR(255)")
-    private String responsable;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Usuario usuario;
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "idbien", nullable = false)
+    @JoinColumn(name = "idBien", nullable = false)
     private Bien bien;
 
     public Baja() {
     }
 
-    public Baja(Long idBaja, String motivo, Date fecha, Bien bien) {
+    public Baja(Long idBaja, String motivo, Date fecha, Usuario usuario, Bien bien) {
         this.idBaja = idBaja;
         this.motivo = motivo;
         this.fecha = fecha;
+        this.usuario = usuario;
         this.bien = bien;
     }
 
-    public Baja(String motivo, Date fecha, Bien bien) {
+    public Baja(String motivo, Date fecha, Usuario usuario, Bien bien) {
         this.motivo = motivo;
         this.fecha = fecha;
+        this.usuario = usuario;
         this.bien = bien;
     }
 
-    public Long getIdbaja() {
+    public Long getIdBaja() {
         return idBaja;
     }
 
-    public void setIdbaja(Long idbaja) {
-        this.idBaja = idbaja;
+    public void setIdBaja(Long idBaja) {
+        this.idBaja = idBaja;
     }
 
     public String getMotivo() {
@@ -76,4 +80,13 @@ public class Baja {
     public void setBien(Bien bien) {
         this.bien = bien;
     }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
 }
