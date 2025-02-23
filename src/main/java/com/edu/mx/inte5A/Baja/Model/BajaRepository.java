@@ -11,7 +11,4 @@ import java.util.Optional;
 @Repository
 public interface BajaRepository extends JpaRepository<Baja, Long> {
 
-    @Query("SELECT b FROM Baja b JOIN FETCH b.usuario WHERE b.idBaja = :idBaja")
-    Optional<Baja> findByIdWithUsuario(@Param("idBaja") Long idBaja);
-
 }

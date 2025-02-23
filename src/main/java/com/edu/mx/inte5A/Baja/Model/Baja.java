@@ -22,10 +22,6 @@ public class Baja {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Usuario usuario;
-
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "idBien", nullable = false)
@@ -34,18 +30,16 @@ public class Baja {
     public Baja() {
     }
 
-    public Baja(Long idBaja, String motivo, Date fecha, Usuario usuario, Bien bien) {
+    public Baja(Long idBaja, String motivo, Date fecha, Bien bien) {
         this.idBaja = idBaja;
         this.motivo = motivo;
         this.fecha = fecha;
-        this.usuario = usuario;
         this.bien = bien;
     }
 
-    public Baja(String motivo, Date fecha, Usuario usuario, Bien bien) {
+    public Baja(String motivo, Date fecha, Bien bien) {
         this.motivo = motivo;
         this.fecha = fecha;
-        this.usuario = usuario;
         this.bien = bien;
     }
 
@@ -79,14 +73,6 @@ public class Baja {
 
     public void setBien(Bien bien) {
         this.bien = bien;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
     }
 
 }

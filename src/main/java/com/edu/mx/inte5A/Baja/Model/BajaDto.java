@@ -20,17 +20,13 @@ public class BajaDto {
     @NotNull(groups = {RegistrarBaja.class, CambiarStatus.class}, message = "Es necesario el id del bien")
     private Long idBien;
 
-    @NotNull(groups = {RegistrarBaja.class}, message = "Es necesario el id del usuario")
-    private Long idUsuario;
-
     public BajaDto() {}
 
-    public BajaDto(Long idBaja, String motivo, Date fecha, Long idBien, Long idUsuario) {
+    public BajaDto(Long idBaja, String motivo, Date fecha, Long idBien) {
         this.idBaja = idBaja;
         this.motivo = motivo;
         this.fecha = fecha;
         this.idBien = idBien;
-        this.idUsuario = idUsuario;
     }
 
     // Getters y Setters
@@ -56,14 +52,6 @@ public class BajaDto {
 
     public void setIdBien(Long idBien) {
         this.idBien = idBien;
-    }
-
-    public Long getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Long idUsuario) {
-        this.idUsuario = idUsuario;
     }
 
     public Date getFecha(){

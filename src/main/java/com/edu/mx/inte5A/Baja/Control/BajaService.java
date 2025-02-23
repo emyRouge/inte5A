@@ -7,8 +7,6 @@ import com.edu.mx.inte5A.Baja.Model.BajaRepository;
 import com.edu.mx.inte5A.Bien.Model.Bien;
 
 import com.edu.mx.inte5A.Bien.Model.BienRepository;
-import com.edu.mx.inte5A.Usuario.Model.Usuario;
-import com.edu.mx.inte5A.Usuario.Model.UsuarioRepository;
 import com.edu.mx.inte5A.utils.Message;
 import com.edu.mx.inte5A.utils.TypesResponse;
 import org.slf4j.Logger;
@@ -31,13 +29,10 @@ public class BajaService {
 
     private final BajaRepository bajaRepository;
     private final BienRepository bienRepository;
-    private final UsuarioRepository usuarioRepository;
-
     @Autowired
-    public BajaService(BajaRepository bajaRepository, BienRepository bienRepository, UsuarioRepository usuarioRepository) {
+    public BajaService(BajaRepository bajaRepository, BienRepository bienRepository) {
         this.bajaRepository = bajaRepository;
         this.bienRepository = bienRepository;
-        this.usuarioRepository = usuarioRepository;
     }
 
     //Guardar baja
@@ -57,18 +52,10 @@ public class BajaService {
             return new ResponseEntity<>(new Message("El bien no existe", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
         }
 
-        //Se agrega tambien un responsable que vendria siendo un usuario
-        Optional<Usuario>usuarioOptional = usuarioRepository.findById(bajaDto.getIdUsuario());
-        if (usuarioOptional.isEmpty()) {
-            logger.info("No se encuentra el usuario");
-            return new ResponseEntity<>(new Message("El usuario no existe", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
-        }
-
         Baja nuevaBaja = new Baja();
         nuevaBaja.setMotivo(bajaDto.getMotivo());
         nuevaBaja.setFecha(new Date());
         nuevaBaja.setBien(bienOptional.get());
-        nuevaBaja.setUsuario(usuarioOptional.get());
 
         nuevaBaja = bajaRepository.saveAndFlush(nuevaBaja);
         if (nuevaBaja == null) {
@@ -146,14 +133,7 @@ public class BajaService {
         }
 
         Baja baja = bajaOptional.get();
-        Usuario usuario = baja.getUsuario();
-
-        if (usuario == null) {
-            logger.warn("No se encontro el usuario asociado ala baja");
-            return new ResponseEntity<>(new Message("No se encontro el usuario asociado ala baja", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
-        }
-
-        BajaDto bajaDto = new BajaDto(baja.getIdBaja(), baja.getMotivo(), baja.getFecha(), baja.getBien().getIdBien(), usuario.getIdusuario());
+        BajaDto bajaDto = new BajaDto(baja.getIdBaja(), baja.getMotivo(), baja.getFecha(), baja.getBien().getIdBien());
 
         logger.info("Bajas encontradas correctamente");
         return new ResponseEntity<>(new Message(bajaDto, "Bajas encontradas para el responsable: ", TypesResponse.SUCCESS), HttpStatus.OK);
