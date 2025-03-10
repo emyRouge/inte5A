@@ -2,6 +2,7 @@ package com.edu.mx.inte5A.Usuario.Model;
 
 import com.edu.mx.inte5A.Lugar.Model.Lugar;
 import com.edu.mx.inte5A.Lugar.Model.LugarDto;
+import com.edu.mx.inte5A.Rol.Model.Rol;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -17,7 +18,7 @@ public class UsuarioDto {
     private String usuario;
 
     @NotBlank (groups = {RegistrarRol.class, ModificarRol.class}, message = "Es necesario tener un rol asignado")
-    private String rol;
+    private Rol rol;
 
     @NotBlank (groups = {RegistrarContrasena.class, ModificarContrasena.class, CambiarContrasena.class}, message = "Es necesario ingresar una contraseña")
     private String Contrasena;
@@ -53,11 +54,12 @@ public class UsuarioDto {
         this.usuario = usuario;
     }
 
-    public String getRol() {
+    public Rol getRol() {
         return rol;
     }
 
-    public void setRol(String rol) {
+    public void setRol(Rol rol) {
+
         this.rol = rol;
     }
 

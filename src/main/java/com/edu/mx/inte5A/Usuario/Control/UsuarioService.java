@@ -93,17 +93,14 @@ public class UsuarioService {
             return new ResponseEntity<>(new Message("La contraseña no puede tener mas de 255 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
-        if (usuarioDto.getRol().length() > 45) {
-            logger.info("Error al actualizar rol");
-            return new ResponseEntity<>(new Message("El rol no puede tener mas de 45 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
-        }
+
 
         Usuario usuario = new Usuario();
         usuario.setNombre(usuarioDto.getNombre());
         usuario.setUsuario(usuarioDto.getUsuario());
         usuario.setContrasena(usuarioDto.getContrasena());
         usuario.setStatus(usuarioDto.isStatus());
-        //usuario.setRol(usuarioDto.getRol());
+        usuario.setRol(usuarioDto.getRol());
         usuario.setLugar(lugar);
 
         usuario = usuarioRepository.saveAndFlush(usuario);
@@ -141,10 +138,7 @@ public class UsuarioService {
             return new ResponseEntity<>(new Message("La contraseña no puede tener mas de 255 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
-        if (usuarioDto.getRol().length() > 45) {
-            logger.info("Error al actualizar rol");
-            return new ResponseEntity<>(new Message("El rol no puede tener mas de 45 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
-        }
+
 
         if (usuarioDto.getIdLugar() != null) {
             Optional<Lugar> lugarOptional = lugarRepository.findById(usuarioDto.getIdLugar());
