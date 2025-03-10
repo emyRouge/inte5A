@@ -103,7 +103,7 @@ public class UsuarioService {
         usuario.setUsuario(usuarioDto.getUsuario());
         usuario.setContrasena(usuarioDto.getContrasena());
         usuario.setStatus(usuarioDto.isStatus());
-        usuario.setRol(usuarioDto.getRol());
+        //usuario.setRol(usuarioDto.getRol());
         usuario.setLugar(lugar);
 
         usuario = usuarioRepository.saveAndFlush(usuario);
@@ -160,7 +160,7 @@ public class UsuarioService {
         usuario.setNombre(usuarioDto.getNombre());
         usuario.setUsuario(usuarioDto.getUsuario());
         usuario.setContrasena(usuarioDto.getContrasena());
-        usuario.setRol(usuarioDto.getRol());
+        //usuario.setRol(usuarioDto.getRol());
 
         if (usuarioDto.getIdLugar() != null) {
             Lugar lugar = lugarRepository.findById(usuarioDto.getIdLugar()).

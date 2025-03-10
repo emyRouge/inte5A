@@ -1,6 +1,7 @@
 package com.edu.mx.inte5A.Usuario.Model;
 
 import com.edu.mx.inte5A.Lugar.Model.Lugar;
+import com.edu.mx.inte5A.Rol.Model.Rol;
 import jakarta.persistence.*;
 
 @Entity
@@ -23,8 +24,9 @@ public class Usuario {
     @Column(name = "status", columnDefinition = "TINYINT DEFAULT 1")
     private boolean status;
 
-    @Column(name = "rol", columnDefinition = "VARCHAR(45)")
-    private String rol;
+    @ManyToOne()
+    @JoinColumn(name = "id_rol", columnDefinition = "BigInt")
+    private Rol rol;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idLugar", nullable = true)
@@ -33,22 +35,21 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(Long idUsuario, String nombre, String usuario, String contrasena, boolean status, String rol, Lugar lugar) {
+    public Usuario(Long idUsuario, String nombre, String usuario, String contrasena, boolean status, Lugar lugar, Rol rol) {
         this.idUsuario = idUsuario;
         this.nombre = nombre;
         this.usuario = usuario;
         this.contrasena = contrasena;
         this.status = status;
-        this.rol = rol;
         this.lugar = lugar;
+        this.rol = rol;
     }
 
-    public Usuario(String nombre, String usuario, String contrasena, boolean status, String rol, Lugar lugar) {
+    public Usuario(String nombre, String usuario, String contrasena, boolean status, Lugar lugar) {
         this.nombre = nombre;
         this.usuario = usuario;
         this.contrasena = contrasena;
         this.status = status;
-        this.rol = rol;
         this.lugar = lugar;
     }
 
@@ -92,11 +93,11 @@ public class Usuario {
         this.status = status;
     }
 
-    public String getRol() {
+    public Rol getRol() {
         return rol;
     }
 
-    public void setRol(String rol) {
+    public void setRol(Rol rol) {
         this.rol = rol;
     }
 
