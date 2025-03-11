@@ -28,7 +28,7 @@ public class AuthController {
 
             // Generar el token JWT
             String jwt = jwtUtil.generateToken((org.springframework.security.core.userdetails.User) authentication.getPrincipal());
-
+            
             // Retornar el token en la respuesta
             return ResponseEntity.ok(new AuthResponse(jwt));
         } catch (AuthenticationException e) {

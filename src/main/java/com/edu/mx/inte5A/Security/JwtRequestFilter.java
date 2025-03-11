@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
+
     private final static Logger logger = LoggerFactory.getLogger(JwtRequestFilter.class);
 
     private final UserDetailsServiceImpl userDetailsService;
