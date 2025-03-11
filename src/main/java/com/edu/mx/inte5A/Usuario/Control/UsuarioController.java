@@ -3,6 +3,7 @@ package com.edu.mx.inte5A.Usuario.Control;
 import com.edu.mx.inte5A.Lugar.Model.LugarDto;
 import com.edu.mx.inte5A.Usuario.Model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class UsuarioController {
         return usuarioService.buscarTodosLosUsuarios();
     }
 
-    @PostMapping
+    @PostMapping("/crearUsuario")
     public ResponseEntity<Object> crearUsuario(@Validated(UsuarioDto.RegistrarUsuario.class) @RequestBody UsuarioDto usuarioDto) {
         return usuarioService.crearUsuario(usuarioDto);
     }
@@ -43,6 +44,10 @@ public class UsuarioController {
     @PatchMapping("/{idUsuario}/status")
     public ResponseEntity<Object> cambiarStatusUsuario(@Validated(UsuarioDto.CambiarStatus.class) @PathVariable Long idUsuario) {
         return usuarioService.cambiarStatusUsuario(idUsuario);
+    }
+    @GetMapping("/up")
+    public ResponseEntity<String> buscarUsuarioUp() {
+        return  new ResponseEntity<>("Hola", HttpStatus.OK);
     }
 
 }

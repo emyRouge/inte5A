@@ -1,5 +1,4 @@
 package com.edu.mx.inte5A.Rol.Model;
-
 import com.edu.mx.inte5A.Usuario.Model.Usuario;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -7,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.util.List;
 
 @Entity
@@ -24,13 +22,12 @@ public class Rol {
     @Column(name = "nombre", columnDefinition = "VARCHAR(40)")
     private String nombre;
 
-    @OneToMany(mappedBy = "rol")
+    @OneToMany(mappedBy = "rol", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Usuario> usuarios;
+
 
     public Rol(String nombre) {
         this.nombre = nombre;
     }
 }
-
-

@@ -17,8 +17,9 @@ public class UsuarioDto {
     @NotBlank(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesario tener un usuario")
     private String usuario;
 
-    @NotBlank (groups = {RegistrarRol.class, ModificarRol.class}, message = "Es necesario tener un rol asignado")
+    @NotNull(groups = {RegistrarRol.class, ModificarRol.class}, message = "Es necesario tener un rol asignado")
     private Rol rol;
+
 
     @NotBlank (groups = {RegistrarContrasena.class, ModificarContrasena.class, CambiarContrasena.class}, message = "Es necesario ingresar una contraseña")
     private String Contrasena;

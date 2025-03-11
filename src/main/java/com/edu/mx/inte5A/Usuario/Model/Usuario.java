@@ -24,12 +24,14 @@ public class Usuario {
     @Column(name = "status", columnDefinition = "TINYINT DEFAULT 1")
     private boolean status;
 
-    @ManyToOne()
-    @JoinColumn(name = "id_rol", columnDefinition = "BigInt")
+    @ManyToOne
+    @JoinColumn(name = "id_rol", nullable = false)
     private Rol rol;
 
+
+
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "idLugar", nullable = true)
+    @JoinColumn(name = "id_lugar", nullable = true)
     private Lugar lugar;
 
     public Usuario() {
