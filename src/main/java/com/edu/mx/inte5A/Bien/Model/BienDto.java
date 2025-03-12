@@ -10,7 +10,6 @@ public class BienDto {
     @NotNull(groups = {CambiarStatus.class}, message = "Es necesario el id del bien")
     private Long idBien;
 
-    @NotBlank(groups = {RegistrarBien.class, ModificarBien.class}, message = "Es necesario el codigo de barras")
     private String codigoBarras;
 
     @NotBlank (groups = {RegistrarBien.class, ModificarBien.class}, message = "Es necesario el numero de serie")

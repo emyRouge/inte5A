@@ -28,6 +28,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class BienService {
@@ -82,80 +83,100 @@ public class BienService {
         return new ResponseEntity<>(new Message(bien,"El bien se encontro exitosamente", TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
+    @Transactional(readOnly = true)
+    public ResponseEntity<Object> buscarPorCodigoBarras(String codigoBarras) {
+        Optional<Bien> bienOptional = bienRepository.findByCodigoBarras(codigoBarras);
+        if (bienOptional.isEmpty()) {
+            return new ResponseEntity<>(new Message("El bien no existe", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(new Message(bienOptional.get(), "Bien encontrado", TypesResponse.SUCCESS), HttpStatus.OK);
+    }
+
+
+
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<Object> crearBien(BienDto bienDto) {
         logger.info("Ejecutando funcion: crear bien");
 
+        // Validación de parámetros
         if (bienDto.getIdTipoBien() == null) {
-            logger.info("El ID del tipo de bien no puede ser nullo");
-            return new ResponseEntity<>(new Message("El ID del tipo de bien no puede ser nullo", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+            logger.info("El ID del tipo de bien no puede ser nulo");
+            return new ResponseEntity<>(new Message("El ID del tipo de bien no puede ser nulo", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
         if (bienDto.getIdUsuario() == null) {
-            logger.info("El ID del usuario no puede ser nullo");
-            return new ResponseEntity<>(new Message("El ID del usuario no puede ser nullo", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+            logger.info("El ID del usuario no puede ser nulo");
+            return new ResponseEntity<>(new Message("El ID del usuario no puede ser nulo", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
         if (bienDto.getIdModelo() == null) {
-            logger.info("El ID del modelo no puede ser nullo");
-            return new ResponseEntity<>(new Message("El ID del modelo no puede ser nullo", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+            logger.info("El ID del modelo no puede ser nulo");
+            return new ResponseEntity<>(new Message("El ID del modelo no puede ser nulo", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
         if (bienDto.getIdMarca() == null) {
-            logger.info("El ID de la marca no puede ser nullo");
-            return new ResponseEntity<>(new Message("El ID de la marca no puede ser nullo", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+            logger.info("El ID de la marca no puede ser nulo");
+            return new ResponseEntity<>(new Message("El ID de la marca no puede ser nulo", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
         if (bienDto.getIdLugar() == null) {
-            logger.error("El ID del lugar no puede ser nullo");
-            return new ResponseEntity<>(new Message("El ID del lugar no puede ser nullo", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+            logger.error("El ID del lugar no puede ser nulo");
+            return new ResponseEntity<>(new Message("El ID del lugar no puede ser nulo", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
+        // Verificación de existencia de entidades relacionadas
         TipoBien tipoBien = tipoBienRepository.findById(bienDto.getIdTipoBien())
                 .orElseThrow(() -> {
-                   logger.info("tipo de bien no encontrado con ID", bienDto.getIdTipoBien());
-                   return new RuntimeException("Tipo de bien no encontrado");
+                    logger.info("Tipo de bien no encontrado con ID", bienDto.getIdTipoBien());
+                    return new RuntimeException("Tipo de bien no encontrado");
                 });
 
         Usuario usuario = usuarioRepository.findById(bienDto.getIdUsuario())
-                .orElseThrow(()-> {
-                    logger.info("usuario no encontrado con ID", bienDto.getIdUsuario());
+                .orElseThrow(() -> {
+                    logger.info("Usuario no encontrado con ID", bienDto.getIdUsuario());
                     return new RuntimeException("Usuario no encontrado");
                 });
 
         Modelo modelo = modeloRepository.findById(bienDto.getIdModelo())
-                .orElseThrow(()-> {
-                    logger.info("mode no encontrado con ID", bienDto.getIdModelo());
+                .orElseThrow(() -> {
+                    logger.info("Modelo no encontrado con ID", bienDto.getIdModelo());
                     return new RuntimeException("Modelo no encontrado");
                 });
 
         Marca marca = marcaRepository.findById(bienDto.getIdMarca())
-                .orElseThrow(()->{
-                    logger.info("marca no encontrado con ID", bienDto.getIdMarca());
-                    return new RuntimeException("Marca no encontrado");
+                .orElseThrow(() -> {
+                    logger.info("Marca no encontrada con ID", bienDto.getIdMarca());
+                    return new RuntimeException("Marca no encontrada");
                 });
 
         Lugar lugar = lugarRepository.findById(bienDto.getIdLugar())
-                .orElseThrow(()->{
-                    logger.info("lugar no encontrado con ID", bienDto.getIdLugar());
+                .orElseThrow(() -> {
+                    logger.info("Lugar no encontrado con ID", bienDto.getIdLugar());
                     return new RuntimeException("Lugar no encontrado");
                 });
 
-        if (bienDto.getCodigoBarras().length() > 45) {
-            logger.info("El codigo de barras no puede exceder los 45 caracteres");
-            return new ResponseEntity<>(new Message("El codigo de barras no puede exceder los 45 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        // Verificación de la longitud del código de barras
+        if (bienDto.getCodigoBarras() == null || bienDto.getCodigoBarras().isEmpty()) {
+            bienDto.setCodigoBarras(generarCodigoBarras()); // Generar código de barras si no está presente
         }
 
+        if (bienDto.getCodigoBarras().length() > 45) {
+            logger.info("El código de barras no puede exceder los 45 caracteres");
+            return new ResponseEntity<>(new Message("El código de barras no puede exceder los 45 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        }
+
+        // Validación de otros campos
         if (bienDto.getnSerie().length() > 100) {
-            logger.info("El numero de serie no puede exceder los 100 caracteres");
-            return new ResponseEntity<>(new Message("El numero de serie no puede exceder los 100 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+            logger.info("El número de serie no puede exceder los 100 caracteres");
+            return new ResponseEntity<>(new Message("El número de serie no puede exceder los 100 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
         if (bienDto.getFecha() == null) {
-            logger.info("El fecha no puede ser nullo");
-            return new ResponseEntity<>(new Message("La fecha no puede ser nullo", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+            logger.info("La fecha no puede ser nula");
+            return new ResponseEntity<>(new Message("La fecha no puede ser nula", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
+        // Creación del objeto Bien y guardado
         Bien bien = new Bien();
         bien.setIdBien(bienDto.getIdBien());
         bien.setCodigoBarras(bienDto.getCodigoBarras());
@@ -170,11 +191,16 @@ public class BienService {
         bien = bienRepository.saveAndFlush(bien);
 
         if (bien == null) {
-            return new ResponseEntity<>(new Message("El bien no se registro", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Message("El bien no se registró", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
-        logger.info("Se creo el bien");
-        return new ResponseEntity<>(new Message(bien,"Se creo el bie exitosamente", TypesResponse.SUCCESS), HttpStatus.OK);
+        logger.info("Se creó el bien");
+        return new ResponseEntity<>(new Message(bien, "Se creó el bien exitosamente", TypesResponse.SUCCESS), HttpStatus.OK);
+    }
+
+    // Método para generar el código de barras automáticamente
+    private String generarCodigoBarras() {
+        return UUID.randomUUID().toString().replace("-", "").substring(0, 12); // Generar un código único de 12 caracteres
     }
 
     @Transactional(rollbackFor = {SQLException.class})
