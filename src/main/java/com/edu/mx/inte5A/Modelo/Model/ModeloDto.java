@@ -13,12 +13,13 @@ public class ModeloDto {
     @NotBlank(groups = {RegistrarModelo.class}, message = "Es necesario el nombre de la marca")
     private String nombreModelo;
 
-    private byte[] foto;
+    private String foto;
+
 
     public ModeloDto() {
     }
 
-    public ModeloDto(Long idModelo, String nombreModelo, boolean status, byte[] foto) {
+    public ModeloDto(Long idModelo, String nombreModelo, boolean status, String foto) {
         this.idModelo = idModelo;
         this.nombreModelo = nombreModelo;
         this.foto = foto;
@@ -40,11 +41,11 @@ public class ModeloDto {
         this.nombreModelo = nombreModelo;
     }
 
-    public byte[] getFoto() {
+    public String getFoto() {
         return foto;
     }
 
-    public void setFoto(byte[] foto) {
+    public void setFoto(String foto) {
         this.foto = foto;
     }
 

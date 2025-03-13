@@ -46,6 +46,7 @@ public class ModeloService {
                 ))
                 .collect(Collectors.toList());
 
+
         return new ResponseEntity<>(new Message(modelos,"Listado de modelos", TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
@@ -133,7 +134,7 @@ public class ModeloService {
     public ResponseEntity<Object> crearModelo (ModeloDto modeloDto) {
         logger.info("Ejecutando funcion: crear modelo");
 
-        byte[] fotoBytes = null;
+        String fotoBytes = null;
         if(modeloDto.getFoto() != null){
             fotoBytes = modeloDto.getFoto();
         }
@@ -141,7 +142,8 @@ public class ModeloService {
         Modelo modelo = new Modelo();
         modelo.setNombreModelo(modeloDto.getNombreModelo());
         modelo.setStatus(modelo.isStatus());
-        modelo.setFoto(fotoBytes);
+        modelo.setFoto(modeloDto.getFoto());
+
         modeloRepository.saveAndFlush(modelo);
 
         logger.info("Modelo creado correctamente");
