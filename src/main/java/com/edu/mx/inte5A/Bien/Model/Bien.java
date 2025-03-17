@@ -93,6 +93,19 @@ public class Bien {
         this.fecha = fecha;
     }
 
+    public Bien(String codigoBarras, String nSerie, boolean status, TipoBien tipoBien, Usuario usuario, Modelo modelo, Marca marca,  List<Baja> bajas, Date fecha) {
+        this.codigoBarras = codigoBarras;
+        this.nSerie = nSerie;
+        this.status = status;
+        this.tipoBien = tipoBien;
+        this.usuario = usuario;
+        this.modelo = modelo;
+        this.marca = marca;
+
+        this.bajas = bajas;
+        this.fecha = fecha;
+    }
+
     public Long getIdBien() {
         return idBien;
     }

@@ -25,10 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class BienService {
@@ -53,6 +50,32 @@ public class BienService {
         this.marcaRepository = marcaRepository;
         this.lugarRepository = lugarRepository;
     }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<Object> obtenerPorcentajeBienesOcupados() {
+        logger.info("Ejecutando función: obtenerPorcentajeBienesOcupados");
+
+        long totalBienes = bienRepository.count();
+        long bienesOcupados = bienRepository.countByLugarIsNotNull(); // Solo cuenta los bienes asignados a un lugar
+        long bienesLibres = totalBienes - bienesOcupados; // Bienes que no están ocupados
+
+        if (totalBienes == 0) {
+            return new ResponseEntity<>(new Message("No hay bienes registrados", TypesResponse.WARNING), HttpStatus.OK);
+        }
+
+        double porcentajeOcupados = (bienesOcupados * 100.0) / totalBienes;
+        double porcentajeLibres = 100.0 - porcentajeOcupados;
+
+        Map<String, Object> resultado = new HashMap<>();
+        resultado.put("porcentajeOcupados", porcentajeOcupados);
+        resultado.put("porcentajeLibres", porcentajeLibres);
+        resultado.put("bienesOcupados", bienesOcupados);
+        resultado.put("bienesLibres", bienesLibres);
+
+        return new ResponseEntity<>(resultado, HttpStatus.OK);
+    }
+
+
 
     @Transactional(readOnly = true)
     public ResponseEntity<Object> buscarTodos() {
@@ -202,6 +225,22 @@ public class BienService {
     private String generarCodigoBarras() {
         return UUID.randomUUID().toString().replace("-", "").substring(0, 12); // Generar un código único de 12 caracteres
     }
+
+    public ResponseEntity<Object> eliminarLugarDeBien(Long id) {
+        Optional<Bien> bienOptional = bienRepository.findById(id);
+
+        if (!bienOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("mensaje", "El bien con ID " + id + " no fue encontrado"));
+        }
+
+        Bien bien = bienOptional.get();
+        bien.setLugar(null); // Eliminar la relación con el lugar
+        bienRepository.save(bien);
+
+        return ResponseEntity.ok(Collections.singletonMap("mensaje", "Lugar eliminado del bien con ID " + id));
+    }
+
 
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<Object> actualizarBien (Long idBien,BienDto bienDto) {

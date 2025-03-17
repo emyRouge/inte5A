@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Habilitar CORS correctamente
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/register", "/lugares/**", "/usuarios/**").permitAll()
+                        .requestMatchers("/auth/**","/bienes/porcentaje-ocupacion", "/register", "/lugares/**", "/usuarios/**").permitAll()
                         .requestMatchers("/town/**","/bienes","/bienes/**").hasAuthority("ROLE_ADMINISTRADOR")
                         .requestMatchers("/state/**").hasAnyAuthority("ROLE_RESPONSABLE", "ROLE_BECARIO")
                         .anyRequest().authenticated()

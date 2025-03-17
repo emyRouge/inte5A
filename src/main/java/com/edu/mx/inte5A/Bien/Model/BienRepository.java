@@ -9,5 +9,6 @@ import java.util.Optional;
 @Repository
 public interface BienRepository extends JpaRepository<Bien, Long> {
     Optional<Bien> findByCodigoBarras(String codigoBarras);
+    long countByLugarIsNotNull();
 
 }
