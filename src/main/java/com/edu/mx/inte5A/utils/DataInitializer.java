@@ -131,7 +131,7 @@ public class DataInitializer {
                     responsable, // Usuario responsable
                     modelo2, // Modelo
                     marca2, // Marca
-                  
+
                     null, // Bajas (puedes dejarlo vacío si no hay bajas asociadas)
                     new Date() // Fecha de creación
             );

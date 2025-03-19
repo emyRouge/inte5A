@@ -15,7 +15,8 @@ import java.util.Base64;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8081")
+
+
 @RequestMapping("/bienes")
 public class BienController {
 
@@ -36,6 +37,8 @@ public class BienController {
     public ResponseEntity<Object> eliminarLugarDeBien(@PathVariable Long id) {
         return bienService.eliminarLugarDeBien(id);
     }
+
+
 
 
     @GetMapping("/{idBien}")
