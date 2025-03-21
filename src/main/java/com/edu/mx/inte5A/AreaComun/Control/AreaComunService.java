@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AreaComunService {
@@ -31,6 +32,39 @@ public class AreaComunService {
     public AreaComunService(AreaComunRepository areaComunRepository,LugarRepository lugarRepository) {
         this.areaComunRepository = areaComunRepository;
         this.lugarRepository = lugarRepository;
+    }
+    @Transactional(readOnly = true)
+    public ResponseEntity<Object> consultarAreasConLugar() {
+        logger.info("Ejecutando funcion: consultar areas con lugar");
+
+        // Obtener todas las áreas comunes
+        var areasComunes = areaComunRepository.findAll();
+        if (areasComunes.isEmpty()) {
+            return new ResponseEntity<>(new Message("No hay áreas comunes registradas.", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+        }
+
+        // Convertir las áreas comunes y sus lugares en un DTO adecuado para la respuesta
+        var areasConLugar = areasComunes.stream().map(area -> {
+            AreaComunDto areaDto = new AreaComunDto();
+            areaDto.setIdArea(area.getIdArea());
+            areaDto.setNombreArea(area.getNombreArea());
+
+            // Asegurarse de que se incluye el lugar, si existe
+            if (area.getLugar() != null) {
+                Lugar lugar = area.getLugar(); // Obtener el objeto Lugar directamente
+                LugarDto lugarDto = new LugarDto();
+                lugarDto.setIdlugar(lugar.getIdlugar());
+                lugarDto.setLugar(lugar.getLugar());
+
+                // Convertir Lugar a LugarDto (y luego asignar LugarDto a AreaComunDto)
+                areaDto.setLugar(lugar); // Aquí pasamos el objeto Lugar directamente
+            }
+
+            return areaDto;
+        }).collect(Collectors.toList());
+
+        // Retornar la respuesta con las áreas y sus lugares
+        return new ResponseEntity<>(new Message(areasConLugar, "Listado de áreas comunes con lugar", TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
         @Transactional(rollbackFor = {SQLException.class})

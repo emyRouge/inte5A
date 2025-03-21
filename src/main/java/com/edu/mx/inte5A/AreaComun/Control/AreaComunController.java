@@ -17,6 +17,10 @@ public class AreaComunController {
     public AreaComunController(AreaComunService areaComunService) {
         this.areaComunService = areaComunService;
     }
+    @GetMapping("/con-lugar")
+    public ResponseEntity<Object> consultarAreasConLugar() {
+        return areaComunService.consultarAreasConLugar();
+    }
 
     @PostMapping
     public ResponseEntity<Object> crearAreaComun(@Validated(AreaComunDto.RegistrarArea.class) @RequestBody AreaComunDto areaComunDto) {

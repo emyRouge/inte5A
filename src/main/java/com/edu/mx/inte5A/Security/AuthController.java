@@ -7,7 +7,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
-
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:8081", "http://192.168.0.37:8081", "http://192.168.43.127:8081"})
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
