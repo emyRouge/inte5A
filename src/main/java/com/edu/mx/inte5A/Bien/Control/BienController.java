@@ -82,9 +82,6 @@ public class BienController {
         return bienService.actualizarBien(idBien, bienDTO);
     }
 
-    @PatchMapping("/{idBien}/status")
-    public ResponseEntity<Object> cambiarStatus ( @Validated (BienDto.CambiarStatus.class) @PathVariable Long idBien) {
-        return bienService.cambiarStatus(idBien);
-    }
+
 
 }

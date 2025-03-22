@@ -282,26 +282,6 @@ public class BienService {
 
     }
 
-    @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<Object> cambiarStatus (Long idBien) {
-        logger.info("Ejecutando funcion: cambiarStatus");
 
-        Optional<Bien> bienOptional = bienRepository.findById(idBien);
-        if (bienOptional.isEmpty()) {
-            logger.info("No se encontro el bien");
-            return new ResponseEntity<>(new Message("El bien no existe", TypesResponse.WARNING),HttpStatus.BAD_REQUEST);
-        }
-
-        Bien bien = bienOptional.get();
-        bien.setStatus(!bien.isStatus());
-        bienRepository.saveAndFlush(bien);
-
-        if (bien == null) {
-            return new ResponseEntity<>(new Message("El bien no se cambio de status", TypesResponse.ERROR),HttpStatus.BAD_REQUEST);
-        }
-
-        logger.info("Se actualizo el estado del bien");
-        return new ResponseEntity<>(new Message(bien, "Se actualizo el estado exitosamente", TypesResponse.SUCCESS), HttpStatus.OK);
-    }
 
 }

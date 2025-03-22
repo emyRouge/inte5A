@@ -34,6 +34,23 @@ public class UsuarioService {
         this.usuarioRepository = usuarioRepository;
         this.lugarRepository = lugarRepository;
     }
+    @Transactional(readOnly = true)
+    public ResponseEntity<Object> obtenerLugaresSinUsuarios() {
+        logger.info("Ejecutando función: obtener lugares sin usuarios");
+
+        List<Lugar> lugaresSinUsuarios = lugarRepository.findLugaresSinUsuarios();
+
+        if (lugaresSinUsuarios.isEmpty()) {
+            logger.info("No hay lugares sin usuarios asociados");
+            return new ResponseEntity<>(new Message("No hay lugares sin usuarios", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+        }
+
+        List<LugarDto> lugarDtos = lugaresSinUsuarios.stream()
+                .map(lugar -> new LugarDto(lugar.getIdlugar(), lugar.getLugar(), lugar.isStatus()))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(new Message(lugarDtos, "Lugares sin usuarios encontrados", TypesResponse.SUCCESS), HttpStatus.OK);
+    }
 
     @Transactional(readOnly = true)
     public ResponseEntity<Object> buscarUsuarioPorId(Long idUsuario) {

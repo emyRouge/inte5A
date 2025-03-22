@@ -60,8 +60,7 @@ public class Bien {
     private Lugar lugar;
 
     @OneToMany(mappedBy = "bien", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private List<Baja> bajas;
+   private List<Baja> bajas;
 
     public Bien() {
     }

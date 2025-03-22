@@ -33,10 +33,12 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Habilitar CORS correctamente
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/bienes/porcentaje-ocupacion", "/register", "/lugares/**", "/usuarios/**",
-                                "/tipo-bien/**", "/marca/**", "/modelo/**","/api/areas-comunes/**").permitAll()
+                        .requestMatchers("/bajas/**","/bienes","/bienes/**","/auth/**", "/bienes/porcentaje-ocupacion", "/register",
+                                "/lugares/**", "/usuarios/**","usuarios/crearUsuario", "/tipo-bien/**",
+                                "/marca/**", "/modelo/**","/api/areas-comunes/**").permitAll()
 
-                        .requestMatchers("/town/**","/bienes","/bienes/**").hasAuthority("ROLE_ADMINISTRADOR")
+
+                        .requestMatchers("/town/**","/bienes","/bienes/**","/tipo-bien/**","usuarios/crearUsuario").hasAuthority("ROLE_ADMINISTRADOR")
                         .requestMatchers("/state/**").hasAnyAuthority("ROLE_RESPONSABLE", "ROLE_BECARIO")
                         .anyRequest().authenticated()
                 )
@@ -60,7 +62,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173","http://localhost:8081","http://192.168.0.37:8081","http://192.168.43.127:8081")); // Agrega más orígenes si es necesario
+        configuration.setAllowedOrigins(List.of("http://localhost:5173/**","http://localhost:5173","http://localhost:8081","http://192.168.0.37:8081","http://192.168.43.127:8081")); // Agrega más orígenes si es necesario
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);

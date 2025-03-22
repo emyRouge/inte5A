@@ -40,6 +40,10 @@ public class UsuarioController {
     public ResponseEntity<Object> actualizarUsuario(@PathVariable Long idUsuario, @Validated(UsuarioDto.ModificarUsuario.class) @RequestBody UsuarioDto usuarioDto) {
         return usuarioService.actualizarUsuario(idUsuario, usuarioDto);
     }
+    @GetMapping("/lugares-sin-usuarios")
+    public ResponseEntity<Object> obtenerLugaresSinUsuarios() {
+        return usuarioService.obtenerLugaresSinUsuarios();
+    }
 
     @PatchMapping("/{idUsuario}/status")
     public ResponseEntity<Object> cambiarStatusUsuario(@Validated(UsuarioDto.CambiarStatus.class) @PathVariable Long idUsuario) {

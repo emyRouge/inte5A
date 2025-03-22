@@ -38,35 +38,65 @@ public class BajaService {
     //Guardar baja
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<Object> crearBaja(BajaDto bajaDto) {
-        logger.info("Ejecutando funcion: crear baja");
+        logger.info("Ejecutando función: crear baja");
 
-        bajaDto.setMotivo(bajaDto.getMotivo());
+        // Validar motivo
         if (bajaDto.getMotivo().length() > 255) {
             logger.warn("El motivo de la baja excede el número de caracteres (255)");
-            return new ResponseEntity<>(new Message("El motivo de la baja excede el número de caracteres (255)", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(
+                    new Message("El motivo de la baja excede el número de caracteres (255)", TypesResponse.WARNING),
+                    HttpStatus.BAD_REQUEST
+            );
         }
 
+        // Verificar existencia del bien
         Optional<Bien> bienOptional = bienRepository.findById(bajaDto.getIdBien());
         if (bienOptional.isEmpty()) {
             logger.info("No se encuentra el bien");
-            return new ResponseEntity<>(new Message("El bien no existe", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(
+                    new Message("El bien no existe", TypesResponse.WARNING),
+                    HttpStatus.NOT_FOUND
+            );
         }
 
+        Bien bien = bienOptional.get();
+
+        // Validar si el bien ya está dado de baja
+        if (!bien.isStatus()) {
+            logger.info("El bien ya está dado de baja");
+            return new ResponseEntity<>(
+                    new Message("El bien ya está dado de baja", TypesResponse.WARNING),
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+
+        // Crear la baja
         Baja nuevaBaja = new Baja();
         nuevaBaja.setMotivo(bajaDto.getMotivo());
         nuevaBaja.setFecha(new Date());
-        nuevaBaja.setBien(bienOptional.get());
+        nuevaBaja.setBien(bien);
 
         nuevaBaja = bajaRepository.saveAndFlush(nuevaBaja);
+
         if (nuevaBaja == null) {
-            logger.info("No se pudo registrar el baja");
-            return new ResponseEntity<>(new Message(nuevaBaja, "No se pudo registrar la baja", TypesResponse.ERROR), HttpStatus.BAD_REQUEST);
+            logger.info("No se pudo registrar la baja");
+            return new ResponseEntity<>(
+                    new Message("No se pudo registrar la baja", TypesResponse.ERROR),
+                    HttpStatus.BAD_REQUEST
+            );
         }
 
-        logger.info("Baja registrada correctamente");
-        return new ResponseEntity<>(new Message(nuevaBaja, "Baja registrada correctamente", TypesResponse.SUCCESS), HttpStatus.OK);
+        // Actualizar el estado del bien a false
+        bien.setStatus(false);
+        bienRepository.saveAndFlush(bien);
 
+        logger.info("Baja registrada y estado del bien actualizado correctamente");
+        return new ResponseEntity<>(
+                new Message(nuevaBaja, "Baja registrada correctamente", TypesResponse.SUCCESS),
+                HttpStatus.OK
+        );
     }
+
 
     //Modificar area
     @Transactional(rollbackFor ={SQLException.class})

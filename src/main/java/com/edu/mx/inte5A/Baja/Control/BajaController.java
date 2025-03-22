@@ -19,9 +19,10 @@ public class BajaController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> crearBaja(@Validated (BajaDto.RegistrarBaja.class) @RequestBody BajaDto bajaDto) {
+    public ResponseEntity<Object> crearBaja(@Validated(BajaDto.RegistrarBaja.class) @RequestBody BajaDto bajaDto) {
         return bajaService.crearBaja(bajaDto);
     }
+
 
     @PutMapping("/{idBaja}")
     public ResponseEntity<Object> modificarBaja(@PathVariable Long idBaja, @Validated (BajaDto.ModificarBaja.class) @RequestBody BajaDto bajaDto) {
