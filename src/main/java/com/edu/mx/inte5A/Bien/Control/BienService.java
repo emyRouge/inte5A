@@ -206,6 +206,7 @@ public class BienService {
         bien.setnSerie(bienDto.getnSerie());
         bien.setFecha(new Date());
         bien.setTipoBien(tipoBien);
+        bien.setStatus(true);
         bien.setUsuario(usuario);
         bien.setModelo(modelo);
         bien.setMarca(marca);

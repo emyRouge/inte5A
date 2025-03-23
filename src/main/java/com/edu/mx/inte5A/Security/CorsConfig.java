@@ -14,7 +14,7 @@ public class CorsConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**") // Permitir todas las rutas
                         .allowedOrigins("http://localhost:5173","http://localhost:5173/**","http://localhost:8081", "http://192.168.0.37:8081","http://192.168.43.127:8081") // IP de tu PC y localhost
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedMethods("GET","PATCH", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
             }

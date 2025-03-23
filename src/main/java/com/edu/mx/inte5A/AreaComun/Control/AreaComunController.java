@@ -37,9 +37,10 @@ public class AreaComunController {
         return areaComunService.asignarLugar(idArea, idLugar);
     }
 
-    @PutMapping({"/{idArea}"})
-    public ResponseEntity<Object> actualizarAreaComun(@PathVariable Long idArea, @Validated (AreaComunDto.ModificarArea.class)@RequestBody AreaComunDto areaComunDto) {
+    @PutMapping("/areas-comunes/{idArea}")
+    public ResponseEntity<Object> modificarArea(@PathVariable Long idArea, @RequestBody AreaComunDto areaComunDto) {
         return areaComunService.modificarArea(idArea, areaComunDto);
     }
+
 
 }

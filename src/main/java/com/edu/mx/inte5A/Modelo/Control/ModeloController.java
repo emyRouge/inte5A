@@ -35,8 +35,8 @@ public class ModeloController {
         return modeloService.buscarModelosPorNombre(nombreModelo);
     }
 
-    @PutMapping("/cambiar-status/{idModelo}")
-    public ResponseEntity<Object> cambiarStatusModelo(@Validated (ModeloDto.CambiarStatus.class) @PathVariable Long idModelo) {
+    @PatchMapping("/cambiar-status/{idModelo}")
+    public ResponseEntity<Object> cambiarStatusModelo(@PathVariable Long idModelo) {
         return modeloService.cambiarStatusModelo(idModelo);
     }
 

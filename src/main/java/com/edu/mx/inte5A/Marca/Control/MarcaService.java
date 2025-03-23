@@ -100,9 +100,9 @@ public class MarcaService {
 
     }
     //Cambiar status
-    @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<Object> cambiarStatusMarcas (Long idMarca){
-        logger.info("Ejecutando funcion: cambiar status marcas");
+    @Transactional(rollbackFor = SQLException.class)
+    public ResponseEntity<Object> cambiarStatusMarcas(Long idMarca) {
+        logger.info("Ejecutando función: cambiar status marcas");
 
         Optional<Marca> marcaOptional = marcaRepository.findById(idMarca);
         if (marcaOptional.isEmpty()) {
@@ -111,13 +111,13 @@ public class MarcaService {
         }
 
         Marca marca = marcaOptional.get();
-        marca.setStatus(marca.isStatus());
-        marca = marcaRepository.saveAndFlush(marca);
+        marca.setStatus(!marca.isStatus()); // Cambia el estado correctamente
+        marcaRepository.save(marca);
+
         MarcaDto marcaDto = new MarcaDto(marca.getIdmarca(), marca.getNombre(), marca.isStatus());
 
         logger.info("Cambio de status exitosamente");
-        return new ResponseEntity<>(new Message(marcaDto, "Se cambio el status", TypesResponse.SUCCESS), HttpStatus.OK);
-
+        return new ResponseEntity<>(new Message(marcaDto, "Se cambió el status", TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
     //Actualizar

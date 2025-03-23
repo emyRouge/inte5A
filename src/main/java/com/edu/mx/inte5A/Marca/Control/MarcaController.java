@@ -35,8 +35,8 @@ public class MarcaController {
         return marcaService.buscarMarcasPorNombre(nombre);
     }
 
-    @PutMapping("/cambiar-status/{idMarca}")
-    public ResponseEntity<Object> cambiarStatusMarcas(@Validated(MarcaDto.CambiarStatus.class) @PathVariable Long idMarca) {
+    @PatchMapping("/cambiar-status/{idMarca}")
+    public ResponseEntity<Object> cambiarStatusMarcas(@PathVariable Long idMarca) {
         return marcaService.cambiarStatusMarcas(idMarca);
     }
 

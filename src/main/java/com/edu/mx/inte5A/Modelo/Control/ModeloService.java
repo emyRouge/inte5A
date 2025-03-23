@@ -87,24 +87,24 @@ public class ModeloService {
     }
 
     //Cambiar status
-    @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<Object> cambiarStatusModelo (Long idMarca){
-        logger.info("Ejecutando funcion: cambiar status modelo");
+    @Transactional(rollbackFor = SQLException.class)
+    public ResponseEntity<Object> cambiarStatusModelo(Long idModelo) {
+        logger.info("Ejecutando función: cambiar status modelo");
 
-        Optional<Modelo> modeloOptional = modeloRepository.findById(idMarca);
-        if(modeloOptional.isEmpty()){
+        Optional<Modelo> modeloOptional = modeloRepository.findById(idModelo);
+        if (modeloOptional.isEmpty()) {
             logger.info("Modelo no encontrado");
-            return new ResponseEntity<>(new Message(modeloOptional,"",TypesResponse.SUCCESS),HttpStatus.OK);
+            return new ResponseEntity<>(new Message(null, "Modelo no encontrado", TypesResponse.ERROR), HttpStatus.NOT_FOUND);
         }
 
         Modelo modelo = modeloOptional.get();
-        modelo.setStatus(modelo.isStatus());
+        modelo.setStatus(!modelo.isStatus()); // Alternar el estado
         modeloRepository.saveAndFlush(modelo);
-        ModeloDto modeloDto = new ModeloDto(modelo.getIdModelo(),modelo.getNombreModelo(),modelo.isStatus(),modelo.getFoto());
 
-        logger.info("Se cambio el status correctamente");
-        return new ResponseEntity<>(new Message(modeloDto,"Se cambio el status correctamente",TypesResponse.SUCCESS), HttpStatus.OK);
+        ModeloDto modeloDto = new ModeloDto(modelo.getIdModelo(), modelo.getNombreModelo(), modelo.isStatus(), modelo.getFoto());
 
+        logger.info("Se cambió el status correctamente");
+        return new ResponseEntity<>(new Message(modeloDto, "Se cambió el status correctamente", TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
     //actualizar

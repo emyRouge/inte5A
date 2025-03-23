@@ -9,7 +9,14 @@ public class ModeloDto {
 
     @NotNull(groups = {CambiarStatus.class}, message = "Es necesario el id del  modelo")
     private Long idModelo;
+    private boolean status; // <-- Agrega este campo
+    public boolean isStatus() { // <-- Agregar getter y setter para `status`
+        return status;
+    }
 
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
     @NotBlank(groups = {RegistrarModelo.class}, message = "Es necesario el nombre de la marca")
     private String nombreModelo;
 
@@ -22,6 +29,7 @@ public class ModeloDto {
     public ModeloDto(Long idModelo, String nombreModelo, boolean status, String foto) {
         this.idModelo = idModelo;
         this.nombreModelo = nombreModelo;
+        this.status = status;
         this.foto = foto;
     }
 
