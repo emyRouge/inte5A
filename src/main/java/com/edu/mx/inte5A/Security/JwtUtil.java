@@ -2,8 +2,10 @@ package com.edu.mx.inte5A.Security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.security.core.userdetails.UserDetails;
 import javax.crypto.SecretKey;
@@ -54,12 +56,14 @@ public class JwtUtil {
         Map<String, Object> claims = new HashMap<>();
 
         // Obtener el rol del usuario
-        String role = userDetails.getAuthorities().iterator().next().getAuthority();
-        claims.put("role", role); // Agregar el rol al token
+        String role = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .findFirst()
+                .orElse(null);
 
+        claims.put("role", role); // Agregar el rol al token
         return createToken(claims, userDetails.getUsername());
     }
-
 
     private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
@@ -67,7 +71,7 @@ public class JwtUtil {
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSigningKey())
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
