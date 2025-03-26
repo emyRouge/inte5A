@@ -51,6 +51,11 @@ public class UsuarioService {
 
         return new ResponseEntity<>(new Message(lugarDtos, "Lugares sin usuarios encontrados", TypesResponse.SUCCESS), HttpStatus.OK);
     }
+    @Transactional(readOnly = true)
+    public Usuario findByUsername(String username) {
+        return usuarioRepository.findByUsuario(username)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+    }
 
     @Transactional(readOnly = true)
     public ResponseEntity<Object> buscarUsuarioPorId(Long idUsuario) {

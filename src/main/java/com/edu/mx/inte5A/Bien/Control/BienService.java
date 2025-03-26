@@ -242,6 +242,26 @@ public class BienService {
         return ResponseEntity.ok(Collections.singletonMap("mensaje", "Lugar eliminado del bien con ID " + id));
     }
 
+    @Transactional(readOnly = true)
+    public ResponseEntity<Object> obtenerBienesPorResponsable(Long idUsuario) {
+        logger.info("Ejecutando función: obtenerBienesPorResponsable");
+
+        // Buscar el usuario por su ID
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);
+        if (usuarioOptional.isEmpty()) {
+            return new ResponseEntity<>(new Message("Usuario no encontrado", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+        }
+
+        // Obtener los bienes del usuario
+        List<Bien> bienes = bienRepository.findByUsuario(usuarioOptional.get());
+
+        if (bienes.isEmpty()) {
+            return new ResponseEntity<>(new Message("El usuario no tiene bienes asignados", TypesResponse.WARNING), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(new Message(bienes, "Bienes asociados al usuario", TypesResponse.SUCCESS), HttpStatus.OK);
+    }
+
 
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<Object> actualizarBien (Long idBien,BienDto bienDto) {

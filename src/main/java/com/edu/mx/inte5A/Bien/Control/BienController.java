@@ -67,6 +67,12 @@ public class BienController {
         }
     }
 
+    @GetMapping("/responsable/{idUsuario}")
+    public ResponseEntity<Object> obtenerBienesPorResponsable(@PathVariable Long idUsuario) {
+        return bienService.obtenerBienesPorResponsable(idUsuario);
+    }
+
+
     @GetMapping
     public ResponseEntity<Object> obtenerTodosLosBienes() {
         return bienService.buscarTodos();

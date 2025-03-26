@@ -68,15 +68,13 @@ public class LugarService {
     @Transactional(readOnly = true)
     public ResponseEntity<Object> buscarBienesPorLugar(Long idLugar) {
         logger.info("Ejecutando funcion: BuscarBienesPorLugar");
-
         List<Bien> bienes = lugarRepository.findBienesByLugarId(idLugar);
         if (bienes.isEmpty()) {
-            logger.warn("No se encontraron bienes para el lugar con ID: " + idLugar);
-            return new ResponseEntity<>(new Message("No se encontraron bienes para el lugar", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Message("No se encontraron bienes", TypesResponse.WARNING));
         }
-
-        return new ResponseEntity<>(new Message(bienes, "Listado de bienes por lugar", TypesResponse.SUCCESS), HttpStatus.OK);
+        return ResponseEntity.ok(new Message(bienes, "SUCCESS", TypesResponse.SUCCESS));
     }
+
 
     //Buscar por ID
     @Transactional(readOnly = true)
