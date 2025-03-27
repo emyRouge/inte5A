@@ -66,6 +66,10 @@ public class BienController {
             return new ResponseEntity<>(new Message("Error al generar la imagen del código de barras", TypesResponse.ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @PatchMapping("/{idBien}/asignar-lugar/{idLugar}")
+    public ResponseEntity<Object> asignarLugarABien(@PathVariable Long idBien, @PathVariable Long idLugar) {
+        return bienService.asignarLugarABien(idBien, idLugar);
+    }
 
     @GetMapping("/responsable/{idUsuario}")
     public ResponseEntity<Object> obtenerBienesPorResponsable(@PathVariable Long idUsuario) {

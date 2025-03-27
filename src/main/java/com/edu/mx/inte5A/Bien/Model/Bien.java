@@ -105,6 +105,8 @@ public class Bien {
         this.fecha = fecha;
     }
 
+
+
     public Long getIdBien() {
         return idBien;
     }

@@ -32,7 +32,7 @@ public class BienDto {
     @NotNull (groups = {ModificarBien.class, CambiarStatus.class}, message = "Es necesario el id de la marca")
     private Long idMarca;
 
-    @NotNull (groups = {ModificarBien.class, CambiarStatus.class}, message = "Es necesario el id del lugar")
+
     private Long idLugar;
 
     public BienDto() {
