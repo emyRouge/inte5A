@@ -69,6 +69,11 @@ public class LugarService {
     public ResponseEntity<Object> buscarBienesPorLugar(Long idLugar) {
         logger.info("Ejecutando funcion: BuscarBienesPorLugar");
         List<Bien> bienes = lugarRepository.findBienesByLugarId(idLugar);
+        for (int i = 0; i < bienes.stream().count(); i++) {
+            if(!bienes.get(i).isStatus()){
+                bienes.remove(i);
+            }
+        }
         if (bienes.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Message("No se encontraron bienes", TypesResponse.WARNING));
         }

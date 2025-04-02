@@ -16,8 +16,8 @@ public class Modelo {
     @Column(name = "nombreModelo", columnDefinition = "VARCHAR(100)")
     private String nombreModelo;
 
-    @Column(name = "status", columnDefinition = "TINYINT DEFAULT 1")
-    private boolean status;
+    @Column(name = "status", columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private boolean status = true;
 
     @Lob
     @Column(name = "foto", nullable = true)
