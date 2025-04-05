@@ -41,16 +41,17 @@ public class UsuarioService {
         List<Lugar> lugaresSinUsuarios = lugarRepository.findLugaresSinUsuarios();
 
         if (lugaresSinUsuarios.isEmpty()) {
-            logger.info("No hay lugares sin usuarios asociados");
-            return new ResponseEntity<>(new Message("No hay lugares sin usuarios", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+            logger.info("No hay lugares sin usuarios ni áreas comunes asociadas");
+            return new ResponseEntity<>(new Message("No hay lugares sin usuarios ni áreas comunes", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
         }
 
         List<LugarDto> lugarDtos = lugaresSinUsuarios.stream()
                 .map(lugar -> new LugarDto(lugar.getIdlugar(), lugar.getLugar(), lugar.isStatus()))
                 .collect(Collectors.toList());
 
-        return new ResponseEntity<>(new Message(lugarDtos, "Lugares sin usuarios encontrados", TypesResponse.SUCCESS), HttpStatus.OK);
+        return new ResponseEntity<>(new Message(lugarDtos, "Lugares sin usuarios ni áreas comunes encontrados", TypesResponse.SUCCESS), HttpStatus.OK);
     }
+
     @Transactional(readOnly = true)
     public Usuario findByUsername(String username) {
         return usuarioRepository.findByUsuario(username)
@@ -140,12 +141,13 @@ public class UsuarioService {
         usuario.setNombre(usuarioDto.getNombre());
         usuario.setUsuario(usuarioDto.getUsuario());
         usuario.setContrasena(usuarioDto.getContrasena());
-        usuario.setStatus(usuarioDto.isStatus());
+        usuario.setStatus(true); // Asegurar que el status sea siempre true
 
         usuario = usuarioRepository.saveAndFlush(usuario);
         logger.info("Usuario actualizado correctamente");
         return new ResponseEntity<>(new Message(usuario, "El usuario se ha actualizado correctamente", TypesResponse.SUCCESS), HttpStatus.OK);
     }
+
 
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<Object> cambiarStatusUsuario(Long idUsuario) {

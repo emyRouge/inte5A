@@ -42,6 +42,9 @@ public class AuthController {
             // Aquí necesitas obtener el id_lugar desde la base de datos o el servicio de usuario
             Usuario usuario = usuarioService.findByUsername(authRequest.getUsername()); // Debes implementar este método
             Long idLugar = usuario.getLugar().getIdlugar(); // Asegúrate de que la entidad tenga este campo
+            String user= usuario.getUsuario();
+
+            String name= usuario.getNombre();
 
             Long idUsuario = usuario.getIdusuario();
             // Generar el token JWT
@@ -53,7 +56,10 @@ public class AuthController {
             response.put("role", role);
             response.put("id_lugar", idLugar); // Agregar el id_lugar a la respuesta
 
+            response.put("user", user);
             response.put("idUsuario", idUsuario);
+            response.put("name", name);
+
             return ResponseEntity.ok(response);
 
         } catch (AuthenticationException e) {

@@ -15,7 +15,10 @@ public interface LugarRepository extends JpaRepository<Lugar, Long> {
     @Query("SELECT b FROM Bien b WHERE b.lugar.idLugar = :idLugar")
     List<Bien> findBienesByLugarId(@Param("idLugar") Long idLugar);
     List<Lugar> findAllByStatusIsTrue();
-    @Query("SELECT l FROM Lugar l WHERE l.idLugar NOT IN (SELECT u.lugar.idLugar FROM Usuario u)")
+    @Query("SELECT l FROM Lugar l " +
+            "LEFT JOIN l.areas a " +
+            "LEFT JOIN Usuario u ON u.lugar = l " +
+            "WHERE a IS NULL AND u IS NULL")
     List<Lugar> findLugaresSinUsuarios();
 
 }
